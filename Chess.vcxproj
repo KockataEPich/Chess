@@ -23,16 +23,21 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="EasyBot.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
+    <ClCompile Include="Queen.cpp" />
+    <ClCompile Include="Square.cpp" />
     <ClCompile Include="StartFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Bot.h" />
+    <ClInclude Include="ChessPiece.h" />
     <ClInclude Include="EasyBot.h" />
     <ClInclude Include="GLobalHeader.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Queen.h" />
+    <ClInclude Include="Square.h" />
     <ClInclude Include="StartFrame.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

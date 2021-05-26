@@ -19,6 +19,18 @@
     <Filter Include="Source Files\Player">
       <UniqueIdentifier>{bbabbdd8-9572-49b2-baad-d0e22ea43593}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ChessPiece">
+      <UniqueIdentifier>{cbb9cb67-5197-4a4b-ae92-9bd7801f18c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Board">
+      <UniqueIdentifier>{855b8e0e-fac5-468c-98c8-812cf5d05651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ChessPiece">
+      <UniqueIdentifier>{8ec5dfd0-9292-49f3-ad16-ac1421cdb24f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Board">
+      <UniqueIdentifier>{98f5ba68-941b-4763-8a2d-d072e6d1c45a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartFrame.cpp">
@@ -33,8 +45,14 @@
     <ClCompile Include="EasyBot.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Queen.cpp">
+      <Filter>Source Files\ChessPiece</Filter>
+    </ClCompile>
     <ClCompile Include="Board.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Board</Filter>
+    </ClCompile>
+    <ClCompile Include="Square.cpp">
+      <Filter>Source Files\Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,8 +77,17 @@
     <ClInclude Include="EasyBot.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
+    <ClInclude Include="ChessPiece.h">
+      <Filter>Header Files\ChessPiece</Filter>
+    </ClInclude>
+    <ClInclude Include="Queen.h">
+      <Filter>Header Files\ChessPiece</Filter>
+    </ClInclude>
     <ClInclude Include="Board.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Square.h">
+      <Filter>Header Files\Board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
