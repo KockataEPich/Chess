@@ -32,6 +32,10 @@ void StartFrame::startGame()
 	
 	delete(player1);
 	delete(player2);
+
+	Board* board = new Board();
+
+
 		// Board board* = new Board();
 	// game);
 	//

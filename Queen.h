@@ -1,6 +1,7 @@
 #pragma once
 #include "ChessPiece.h"
 #include "Board.h"
+
 class Queen : public ChessPiece
 {
 
