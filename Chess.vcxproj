@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="EasyBot.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="StartFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Bot.h" />
     <ClInclude Include="EasyBot.h" />
     <ClInclude Include="GLobalHeader.h" />

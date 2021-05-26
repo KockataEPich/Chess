@@ -37,10 +37,11 @@ void StartFrame::startGame()
 void StartFrame::playChessGame()
 {
 	// while(Game is over)
-	//	Board.makeMove(Player1.getMove())
-	//	Board.makeMove(Player2.getMove())
+	// makeMove(Player1.getMove())
+	// makeMove(Player2.getMove())
 
 }
+
 
 
 
