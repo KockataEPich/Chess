@@ -1,14 +1,22 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "Square.h"
+#include "Board.h"
+
+class Board;
+class Square;
+
 class ChessPiece
 {
 protected:
-	Square position;
+	Square* position = nullptr;
+	std::string name;
 
 public:
-	virtual std::string getName() = 0;
-	virtual Square getPosition() = 0;
-	virtual std::vector<Square> getLegalMoves() = 0;
+	ChessPiece();
+	std::string getName();
+	Square* getPosition();
+	virtual std::vector<Square*> getLegalMoves(Board board) = 0;
 };
 

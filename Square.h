@@ -1,17 +1,21 @@
 #pragma once
 #include "ChessPiece.h"
+
+class ChessPiece;
+
 class Square
 {
 private:
-	ChessPiece* chessPiece;
+	ChessPiece* chessPiece = nullptr;
 
-	std::pair<int, int> position;
-	ChessPiece* chessPiece;
+	int x;
+	int y;
 
 public:
 	Square(int x, int y, ChessPiece* chessPiece);
 	ChessPiece* getPiece();
-	std::pair<char, int> getPosition();
+	int getX();
+	int getY();
 	void setPiece(ChessPiece* chessPiece);
 	void removePiece();
 };

@@ -2,13 +2,19 @@
 
 Square::Square(int x, int y, ChessPiece* chessPiece)
 {
-	this->position = std::make_pair(x, y);
+	this->x = x;
+	this->y = y;
 	this->chessPiece = chessPiece;
 }
 
-std::pair<char, int> Square::getPosition()
+int Square::getX()
 {
-	return position;
+	return x;
+}
+
+int Square::getY()
+{
+	return y;
 }
 
 ChessPiece* Square::getPiece()

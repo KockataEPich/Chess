@@ -1,20 +1,13 @@
 #include "Queen.h"
 
-Queen::Queen(Square position)
+Queen::Queen(Square* position)
 {
+	this->name = "Queen";
 	this->position = position;
 }
-std::string Queen::getName() {
-	return "Queen";
-}
 
-Square Queen::getPosition()
+std::vector<Square*> Queen::getLegalMoves(Board board)
 {
-	return position;
-}
-
-std::vector<Square> Queen::getLegalMoves(Board board)
-{
-	std::vector<Square> legalMovesList;
+	std::vector<Square*> legalMovesList;
 	return legalMovesList;
 }
