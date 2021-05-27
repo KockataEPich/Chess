@@ -6,7 +6,10 @@ Square::Square(int x, int y, ChessPiece* chessPiece)
 	this->y = y;
 	this->chessPiece = chessPiece;
 }
-
+Square::~Square()
+{
+	delete(this);
+}
 int Square::getX()
 {
 	return x;

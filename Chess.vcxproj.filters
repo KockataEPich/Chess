@@ -83,14 +83,14 @@
     <ClInclude Include="ChessPiece.h">
       <Filter>Header Files\ChessPiece</Filter>
     </ClInclude>
-    <ClInclude Include="Queen.h">
-      <Filter>Header Files\ChessPiece</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>Header Files\Board</Filter>
     </ClInclude>
     <ClInclude Include="Square.h">
       <Filter>Header Files\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Queen.h">
+      <Filter>Header Files\ChessPiece</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

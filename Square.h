@@ -1,6 +1,5 @@
 #pragma once
 #include "ChessPiece.h"
-#include "Queen.h"
 
 class ChessPiece;
 
@@ -14,6 +13,7 @@ private:
 
 public:
 	Square(int x, int y, ChessPiece* chessPiece);
+	~Square();
 	ChessPiece* getPiece();
 	int getX();
 	int getY();
