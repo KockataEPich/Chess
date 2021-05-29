@@ -7,7 +7,8 @@ Queen::Queen(std::shared_ptr<Square> position, PlayerSide playerSide)
 	this->owner = playerSide;
 }
 
-std::vector<std::shared_ptr<Square>> Queen::getLegalMoves(Board board, PlayerSide currentPlayerColor)
+std::vector<std::shared_ptr<Square>> Queen::getLegalMoves(Board board,
+	PlayerSide currentPlayerColor)
 {
 	std::vector<std::shared_ptr<Square>> legalMoves;
 	

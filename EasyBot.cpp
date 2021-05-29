@@ -6,13 +6,7 @@ EasyBot::EasyBot()
 	//pieces = game.generateNewPieces
 }
 
-std::pair<char, int> EasyBot::getMove()
+Move EasyBot::getMove(Board board)
 {		
-	return generateBestMove();
-}
-
-
-std::pair<char, int> EasyBot::generateBestMove()
-{
-	return std::make_pair('e', 8);
+	return Move(board.getBoard()[1][0], board.getBoard()[2][0]);
 }

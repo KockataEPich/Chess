@@ -9,10 +9,11 @@ class Square;
 class Move
 {
 private:
-	std::shared_ptr<ChessPiece> chessPiece;
+	std::shared_ptr<Square> oldLocation;
 	std::shared_ptr<Square> newLocation;
 public:
-	Move(std::shared_ptr<ChessPiece> chessPiece, std::shared_ptr<Square> newLocation);
-
+	Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation);
+	std::shared_ptr<Square> getOldLocation();
+	std::shared_ptr<Square> getNewLocation();
 };
 

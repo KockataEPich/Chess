@@ -5,6 +5,6 @@ class HumanPlayer : public Player
 {
 public:
 	HumanPlayer();
-	std::pair<char, int> getMove();
+	Move getMove(Board board);
 };
 

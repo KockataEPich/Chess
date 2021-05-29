@@ -7,7 +7,8 @@ HumanPlayer::HumanPlayer()
 
 }
 
-std::pair<char, int> HumanPlayer::getMove()
+Move HumanPlayer::getMove(Board board)
 {
-	return std::make_pair('a', 5);
+	//The input would be a on click input
+	return Move(board.getBoard()[1][0], board.getBoard()[2][0]);
 }
