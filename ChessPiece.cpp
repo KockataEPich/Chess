@@ -1,10 +1,4 @@
 #include "ChessPiece.h"
-
-ChessPiece::ChessPiece()
-{
-
-};
-
 std::string ChessPiece::getName()
 {
 	return name;
@@ -27,17 +21,17 @@ PlayerSide ChessPiece::getOwnerOfChessPiece()
 
 
 
-void ChessPiece::addVertical(std::vector<std::shared_ptr<Square>> legalMoves, Board board, PlayerSide currentPlayerColor){
+void ChessPiece::addVertical(std::vector<std::shared_ptr<Square>> legalMoves, Board* board, PlayerSide currentPlayerColor){
 	for (int i = position->getX() + 1; i < 8; i++)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][position->getY()];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][position->getY()];
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}
 
 	for (int i = position->getX() - 1; i >= 0; i--)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][position->getY()];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][position->getY()];
 
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
@@ -45,10 +39,10 @@ void ChessPiece::addVertical(std::vector<std::shared_ptr<Square>> legalMoves, Bo
 }
 
 
-void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>> legalMoves, Board board, PlayerSide currentPlayerColor){
+void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>> legalMoves, Board* board, PlayerSide currentPlayerColor){
 	for (int i = position->getY() + 1; i < 8; i++)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[position->getX()][i];
+		std::shared_ptr<Square> newSquare = board->getBoard()[position->getX()][i];
 
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
@@ -56,38 +50,38 @@ void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>> legalMoves, 
 
 	for (int i = position->getY() - 1; i >= 0; i--)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[position->getX()][i];
+		std::shared_ptr<Square> newSquare = board->getBoard()[position->getX()][i];
 
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}
 }
-void ChessPiece::addSideways(std::vector<std::shared_ptr<Square>> legalMoves, Board board, PlayerSide currentPlayerColor){
+void ChessPiece::addSideways(std::vector<std::shared_ptr<Square>> legalMoves, Board* board, PlayerSide currentPlayerColor){
 
 	for (int i = position->getX() + 1, j = position->getY() - 1; i < 8 || j >= 0; i++, j--)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][j];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}
 
 	for (int i = position->getX() - 1, j = position->getY() + 1; i >= 0 || j < 8; i--, j++)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][j];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}
 
 	for (int i = position->getX() + 1, j = position->getY() + 1; i < 8 || j < 8; i++, j++)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][j];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}
 
 	for (int i = position->getX() - 1, j = position->getY() - 1; i >= 0 || j >= 0; i--, j--)
 	{
-		std::shared_ptr<Square> newSquare = board.getBoard()[i][j];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
 		if (!endSquare(newSquare, legalMoves, currentPlayerColor))
 			break;
 	}

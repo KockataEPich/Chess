@@ -6,7 +6,7 @@ EasyBot::EasyBot()
 	//pieces = game.generateNewPieces
 }
 
-Move EasyBot::getMove(Board board)
+Move EasyBot::getMove(Board* board)
 {		
-	return Move(board.getBoard()[1][0], board.getBoard()[2][0]);
+	return Move(board->getBoard()[1][0], board->getBoard()[2][0]);
 }

@@ -7,8 +7,14 @@ Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> board)
 	this->board = board;
 }
 
-Board::Board()
+Board::Board(Player* player1, Player* player2)
 {
+
+	player1->setColor(PlayerSide::WHITE);
+
+	std::vector<std::shared_ptr<ChessPiece>> whitePieces;
+	std::vector<std::shared_ptr<ChessPiece>> blackPieces;
+
 	for (int i = 0; i < 8; i++)
 	{
 		std::vector<std::shared_ptr<Square>> rowVector;
@@ -21,12 +27,25 @@ Board::Board()
 	}
 		
 	for (int i = 6; i < 8; i++)
-		for(int j = 0; j < 8; j++)
-			board[i][j]->setPiece(std::make_shared<Queen>(board[i][j], PlayerSide::BLACK));
+		for (int j = 0; j < 8; j++)
+		{
+			std::shared_ptr<ChessPiece> newPiece = std::make_shared<Queen>(board[i][j], PlayerSide::BLACK);
+
+			board[i][j]->setPiece(newPiece);
+			blackPieces.push_back(newPiece);
+		}
+			
 	for (int i = 0; i < 2; i++)
 		for (int j = 0; j < 8; j++)
-			board[i][j]->setPiece(std::make_shared<Queen>(board[i][j], PlayerSide::WHITE));
+		{
+			std::shared_ptr<ChessPiece> newPiece = std::make_shared<Queen>(board[i][j], PlayerSide::BLACK);
 
+			board[i][j]->setPiece(newPiece);
+			whitePieces.push_back(newPiece);
+		}
+
+	player1->setPieces(whitePieces);
+	player2->setPieces(blackPieces);
 }
 
 std::vector<std::vector<std::shared_ptr<Square>>> Board::getBoard()
@@ -39,14 +58,15 @@ Board* Board::duplicateBoard()
 	return new Board(this->board);
 }
 
-void Board::makeMove(Move move)
+void Board::makeMove(Move move, PLayer player1, Player player2)
 {
 	auto newSquare = [](Move move, Board* board)
 	{
 		return board->getBoard()[move.getNewLocation()->getX()][move.getNewLocation()->getY()];
 	};
 
-	//if (newSquare(move, this)->getPiece() != nullptr)
+	if (newSquare(move, this)->getPiece() != nullptr)
+
 		//Means we are overwriting a chesspieces
 
 	newSquare(move, this)->setPiece(move.getOldLocation()->getPiece());
