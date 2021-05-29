@@ -35,6 +35,7 @@ void StartFrame::startGame()
 
 
 	Board* board = new Board();
+	board->getBoard()[0][0]->getPiece()->setPosition(board->getBoard()[5][4]);
 
 	delete(board);
 	

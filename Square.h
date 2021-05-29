@@ -1,23 +1,24 @@
 #pragma once
 #include "ChessPiece.h"
+#include <memory>
 
 class ChessPiece;
 
 class Square
 {
 private:
-	ChessPiece* chessPiece = nullptr;
+	std::shared_ptr<ChessPiece> chessPiece = nullptr;
 
 	int x;
 	int y;
 
 public:
-	Square(int x, int y, ChessPiece* chessPiece);
+	Square(int x, int y, std::shared_ptr<ChessPiece> chessPiece);
 	~Square();
-	ChessPiece* getPiece();
+	std::shared_ptr<ChessPiece> getPiece();
 	int getX();
 	int getY();
-	void setPiece(ChessPiece* chessPiece);
+	void setPiece(std::shared_ptr<ChessPiece> chessPiece);
 	void removePiece();
 };
 

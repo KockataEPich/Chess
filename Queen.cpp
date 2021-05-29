@@ -1,13 +1,20 @@
 #include "Queen.h"
 
-Queen::Queen(Square* position)
+Queen::Queen(std::shared_ptr<Square> position, PlayerSide playerSide)
 {
 	this->name = "Queen";
-	this->position = position;
+	this->position = std::make_shared<Square>(*position);
+	this->owner = playerSide;
 }
 
-std::vector<Square*> Queen::getLegalMoves(Board board)
+std::vector<std::shared_ptr<Square>> Queen::getLegalMoves(Board board, PlayerSide currentPlayerColor)
 {
-	std::vector<Square*> legalMovesList;
-	return legalMovesList;
+	std::vector<std::shared_ptr<Square>> legalMoves;
+	
+	addHorizontal(legalMoves, board, currentPlayerColor);
+	addVertical(legalMoves, board, currentPlayerColor);
+	addSideways(legalMoves, board, currentPlayerColor);
+ 
+	return legalMoves;
 }
+

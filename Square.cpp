@@ -1,6 +1,6 @@
 #include "Square.h"
 
-Square::Square(int x, int y, ChessPiece* chessPiece)
+Square::Square(int x, int y, std::shared_ptr<ChessPiece> chessPiece)
 {
 	this->x = x;
 	this->y = y;
@@ -8,7 +8,7 @@ Square::Square(int x, int y, ChessPiece* chessPiece)
 }
 Square::~Square()
 {
-	delete(this);
+	
 }
 int Square::getX()
 {
@@ -20,12 +20,12 @@ int Square::getY()
 	return y;
 }
 
-ChessPiece* Square::getPiece()
+std::shared_ptr<ChessPiece> Square::getPiece()
 {
 	return chessPiece;
 }
 
-void Square::setPiece(ChessPiece* chessPiece)
+void Square::setPiece(std::shared_ptr<ChessPiece> chessPiece)
 {
 	this->chessPiece = chessPiece;
 }

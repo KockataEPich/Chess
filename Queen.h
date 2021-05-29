@@ -6,8 +6,7 @@ class Queen : public ChessPiece
 {
 
 public:
-	Queen();
-	Queen(Square* position);
-	std::vector<Square*> getLegalMoves(Board board);
+	Queen(std::shared_ptr<Square> position, PlayerSide playerSide);
+	std::vector<std::shared_ptr<Square>> getLegalMoves(Board board, PlayerSide currentPlayerColor);
 };
 
