@@ -9,15 +9,12 @@ class Board;
 
 class Player
 {
-private:
-	std::vector<std::shared_ptr<ChessPiece>> pieces;
+protected:
 	PlayerSide color;
 	// Strategy strategy
 
 public:
-	void setPieces(std::vector<std::shared_ptr<ChessPiece>> pieces);
-	void setColor(PlayerSide color);
-	std::vector<std::shared_ptr<ChessPiece>> getPieces();
+	std::vector<std::shared_ptr<ChessPiece>> getPieces(Board* board);
 	PlayerSide getColor();
 	virtual Move getMove(Board* board) = 0;
 

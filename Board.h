@@ -2,26 +2,31 @@
 #include "Square.h"
 #include "Move.h"
 #include "Player.h"
+#include "PlayerEnum.h"
 #include <vector>
 #include <memory>
 
 class Square;
 class Move;
-class Player;
 
 class Board
 {
 private:
 	std::vector<std::vector<std::shared_ptr<Square>>> board;
-	Player player1;
-	Player player2;
+	std::vector<std::shared_ptr<ChessPiece>> whitePieces;
+	std::vector<std::shared_ptr<ChessPiece>> blackPieces;
+
 public:
-	Board() {};
-	Board(Player* player1, Player* player2);
+	Board();
 	~Board();
-	Board(std::vector<std::vector<std::shared_ptr<Square>>> board);
+	Board(std::vector<std::vector<std::shared_ptr<Square>>> board,
+		std::vector<std::shared_ptr<ChessPiece>> whitePieces,
+	std::vector<std::shared_ptr<ChessPiece>> blackPieces);
+
 	std::vector<std::vector<std::shared_ptr<Square>>>  getBoard();
 	Board* duplicateBoard();
+
+	std::vector<std::shared_ptr<ChessPiece>> getPieceList(PlayerSide side);
 	void makeMove(Move move);
 };
 

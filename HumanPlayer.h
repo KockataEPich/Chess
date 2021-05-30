@@ -3,7 +3,7 @@
 class HumanPlayer : public Player
 {
 public:
-	HumanPlayer();
+	HumanPlayer(PlayerSide color);
 	Move getMove(Board *board);
 };
 

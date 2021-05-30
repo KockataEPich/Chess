@@ -27,11 +27,11 @@ void StartFrame::onStartButtonClicked(wxCommandEvent& evt)
 void StartFrame::startGame()
 {
 	//initialise game
-	Player* player1 = new HumanPlayer();
-	Player* player2 = new EasyBot();
+	Player* player1 = new HumanPlayer(PlayerSide::WHITE);
+	Player* player2 = new EasyBot(PlayerSide::BLACK);
 
 
-	Board* board = new Board(player1, player2);
+	Board* board = new Board();
 
 	delete(board);
 

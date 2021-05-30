@@ -5,7 +5,7 @@
 class EasyBot : public Player
 {
 public:
-	EasyBot();
+	EasyBot(PlayerSide color);
 	Move getMove(Board *board);
 
 };
