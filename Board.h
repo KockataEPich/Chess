@@ -26,6 +26,8 @@ public:
 	std::vector<std::vector<std::shared_ptr<Square>>>  getBoard();
 	Board* duplicateBoard();
 
+	bool isOver();
+
 	std::vector<std::shared_ptr<ChessPiece>> getPieceList(PlayerSide side);
 	void makeMove(Move move);
 };

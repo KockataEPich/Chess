@@ -3,9 +3,15 @@
 
 Move::Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation, PlayerSide side)
 {
+
 	this->oldLocation = oldLocation;
+
 	this->newLocation = newLocation;
+
 	this->side = side;
+
+
+
 }
 
 std::shared_ptr<Square> Move::getOldLocation()

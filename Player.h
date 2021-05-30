@@ -18,4 +18,5 @@ public:
 	PlayerSide getColor();
 	virtual Move getMove(Board* board) = 0;
 
+
 };
