@@ -10,11 +10,12 @@ class Square;
 class Move
 {
 private:
-	std::shared_ptr<Square> oldLocation;
-	std::shared_ptr<Square> newLocation;
+	std::weak_ptr<Square> oldLocation;
+	std::weak_ptr<Square> newLocation;
 	PlayerSide side;
 public:
 	Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation, PlayerSide side);
+	~Move();
 	std::shared_ptr<Square> getOldLocation();
 	std::shared_ptr<Square> getNewLocation();
 	PlayerSide getSide();

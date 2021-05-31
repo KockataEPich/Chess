@@ -29,6 +29,6 @@ public:
 	bool isOver();
 
 	std::vector<std::shared_ptr<ChessPiece>> getPieceList(PlayerSide side);
-	void makeMove(Move move);
+	void makeMove(Move* move);
 };
 

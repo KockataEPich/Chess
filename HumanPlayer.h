@@ -15,6 +15,6 @@ public:
 	void clearPoints();
 
 	HumanPlayer(PlayerSide color);
-	Move getMove(Board *board);
+	Move* getMove(Board *board);
 };
 

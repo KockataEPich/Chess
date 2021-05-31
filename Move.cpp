@@ -16,14 +16,20 @@ Move::Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocat
 
 std::shared_ptr<Square> Move::getOldLocation()
 {
-	return oldLocation;
+	return oldLocation.lock();
 }
 
 std::shared_ptr<Square> Move::getNewLocation()
 {
-	return newLocation;
+	return newLocation.lock();
 }
 
 PlayerSide Move::getSide() {
 	return side;
+}
+
+Move::~Move()
+{
+	newLocation = std::weak_ptr<Square>();
+	oldLocation = std::weak_ptr<Square>();
 }

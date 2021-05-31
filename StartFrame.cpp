@@ -66,6 +66,8 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 		if (board->getBoard()[x][y] == legalMoves->at(i))
 			isMoveLegal = true;
 
+	delete(legalMoves);
+
 	if (isMoveLegal)
 	{
 		player1->setSecondClickedSquare(board->getBoard()[x][y]);
@@ -158,6 +160,7 @@ void StartFrame::changeButtonLegalMoves(int x, int y, bool remove) {
 		for (int i = 0; i < legalMoves->size(); i++) {
 			chessBoard[legalMoves->at(i)->getX()][legalMoves->at(i)->getY()]->SetBackgroundColour(wxColour(0,120,10));
 		}
+		delete(legalMoves);
 		return;
 	}
 

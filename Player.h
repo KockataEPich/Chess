@@ -16,7 +16,7 @@ protected:
 public:
 	std::vector<std::shared_ptr<ChessPiece>> getPieces(Board* board);
 	PlayerSide getColor();
-	virtual Move getMove(Board* board) = 0;
+	virtual Move* getMove(Board* board) = 0;
 
 
 };
