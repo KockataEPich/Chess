@@ -4,10 +4,13 @@
 #include "HumanPlayer.h"
 #include "Queen.h"
 
-
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
 {
 	grid = new wxGridSizer(8, 8, 0, 0);
+
+
+	
+
 
 	for (int x = 0; x < 8; x++)
 	{
@@ -45,28 +48,47 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 
 		if(player1->getFirstClicked() == nullptr)
 			return;
-
 	}
 		
 
 	if (player1->getFirstClicked() == nullptr){
 		player1->setFirstClicked(board->getBoard()[x][y]);
+		changeButtonLegalMoves(x, y, false);
 		return;
 	}
 
-	player1->setSecondClickedSquare(board->getBoard()[x][y]);
+	std::vector<std::shared_ptr<Square>>* legalMoves = player1->getFirstClicked()->
+		getPiece()->getLegalMoves(board, player1->getColor());
 
-	board->makeMove(player1->getMove(board));
+	bool isMoveLegal = false;
 
-	updateGameGUI();
+	for (int i = 0; i < legalMoves->size(); i++)
+		if (board->getBoard()[x][y] == legalMoves->at(i))
+			isMoveLegal = true;
+
+	if (isMoveLegal)
+	{
+		player1->setSecondClickedSquare(board->getBoard()[x][y]);
+
+		board->makeMove(player1->getMove(board));
+
+		updateGameGUI();
+
+		changeButtonLegalMoves(x, y, true);
+
+		player1->clearPoints();
+
+
+
+		board->makeMove(player2->getMove(board));
+
+		updateGameGUI();
+		return;
+	}
 
 	player1->clearPoints();
-
-
-
-	board->makeMove(player2->getMove(board));
-
-	updateGameGUI();
+	changeButtonLegalMoves(x, y, true);
+	
 }
 
 void StartFrame::startGame()
@@ -115,8 +137,7 @@ StartFrame::~StartFrame()
 }
 
 
-void StartFrame::updateGameGUI()
-{
+void StartFrame::updateGameGUI(){
 	for(int i = 0; i < 8; i++)
 		for (int j = 0; j < 8; j++)
 		{
@@ -130,7 +151,22 @@ void StartFrame::updateGameGUI()
 }
 
 
+void StartFrame::changeButtonLegalMoves(int x, int y, bool remove) {
+	if (!remove) {
+		std::vector<std::shared_ptr<Square>>* legalMoves = board->getBoard()[x][y]->
+			getPiece()->getLegalMoves(board, player1->getColor());
+		for (int i = 0; i < legalMoves->size(); i++) {
+			chessBoard[legalMoves->at(i)->getX()][legalMoves->at(i)->getY()]->SetBackgroundColour(wxColour(0,120,10));
+		}
+		return;
+	}
 
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
+		{
+			chessBoard[i][j]->SetBackgroundColour(wxNullColour);
+		}
+}
 
 
 

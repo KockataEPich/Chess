@@ -20,7 +20,7 @@ Board::Board()
 			std::shared_ptr<ChessPiece> newPiece = std::make_shared<Queen>(board[i][j], PlayerSide::WHITE);
 
 			board[i][j]->setPiece(newPiece);
-			blackPieces.push_back(newPiece);
+			whitePieces.push_back(newPiece);
 		}
 			
 	for (int i = 0; i < 2; i++)
@@ -29,7 +29,7 @@ Board::Board()
 			std::shared_ptr<ChessPiece> newPiece = std::make_shared<Queen>(board[i][j], PlayerSide::BLACK);
 
 			board[i][j]->setPiece(newPiece);
-			whitePieces.push_back(newPiece);
+			blackPieces.push_back(newPiece);
 		}
 
 }
@@ -64,12 +64,12 @@ void Board::makeMove(Move move)
 	if (newSquare(move, this)->getPiece() != nullptr)
 		if (move.getSide() == PlayerSide::WHITE) {
 			for (int i = 0; i < blackPieces.size(); i++)
-				if (move.getOldLocation()->getPiece() == blackPieces[i])
+				if (newSquare(move, this)->getPiece() == blackPieces[i])
 					blackPieces.erase(blackPieces.begin() + i);
 		}
 		else {
 			for (int i = 0; i < whitePieces.size(); i++)
-				if (move.getOldLocation()->getPiece() == whitePieces[i])
+				if (newSquare(move, this)->getPiece() == whitePieces[i])
 					whitePieces.erase(whitePieces.begin() + i);
 		}
 
@@ -93,7 +93,7 @@ Board::~Board()
 
 
 std::vector<std::shared_ptr<ChessPiece>> Board::getPieceList(PlayerSide side) {
-	if (side == PlayerSide::BLACK)
+	if (side == PlayerSide::WHITE)
 		return whitePieces;
 	
 	return blackPieces;

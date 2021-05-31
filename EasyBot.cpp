@@ -1,6 +1,7 @@
 #include "EasyBot.h"
 #include <iostream>
 #include <fstream>
+#include <random>
 
 EasyBot::EasyBot(PlayerSide color)
 {
@@ -11,21 +12,20 @@ Move EasyBot::getMove(Board* board){
 	//The input would be a on click input
 	std::vector<std::shared_ptr<ChessPiece>> myPieces = board->getPieceList(color);
 
-
 	std::ofstream myfile;
 	myfile.open("example.txt");
-	if(myPieces[0]->getOwnerOfChessPiece() == color)
-		myfile << "ITS WHITE";
-	else
-		myfile << "ITS BLACK";
+	myfile << myPieces.size();
 	myfile.close();
 	
 	for (int i = 0; i < myPieces.size(); i++)
 	{
 		std::vector<std::shared_ptr<Square>>* legalMoves = myPieces[i]->getLegalMoves(board, color);
 
-		if(legalMoves->size() > 0)
-			return Move(myPieces[i]->getPosition(), legalMoves->at(0), color);
+		if (legalMoves->size() > 0) {
+			Move randomMove(myPieces[i]->getPosition(), legalMoves->at(rand() % legalMoves->size()), color);
+			delete(legalMoves);
+			return randomMove;
+		}
 	}
 
 	//for (int i = 0; i < myPieces.size(); i++)

@@ -36,6 +36,7 @@ public:
 
     void updateGameGUI();
 
+    void changeButtonLegalMoves(int x, int y, bool remove);
 
     
 };
