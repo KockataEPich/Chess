@@ -4,6 +4,7 @@
 #include "Rook.h"
 #include "Knight.h"
 #include "Bishop.h"
+#include "King.h"
 
 Board::Board()
 {
@@ -48,7 +49,7 @@ Board::Board()
 	board[7][3]->setPiece(newPiece4);
 	whitePieces.push_back(newPiece4);
 
-	std::shared_ptr<ChessPiece> newPiece5 = std::make_shared<Queen>(board[7][4], PlayerSide::WHITE);
+	std::shared_ptr<ChessPiece> newPiece5 = std::make_shared<King>(board[7][4], PlayerSide::WHITE);
 
 	board[7][4]->setPiece(newPiece5);
 	whitePieces.push_back(newPiece5);
@@ -101,7 +102,7 @@ Board::Board()
 	board[0][3]->setPiece(newPiece12);
 	blackPieces.push_back(newPiece12);
 
-	std::shared_ptr<ChessPiece> newPiece13 = std::make_shared<Queen>(board[0][4], PlayerSide::BLACK);
+	std::shared_ptr<ChessPiece> newPiece13 = std::make_shared<King>(board[0][4], PlayerSide::BLACK);
 
 	board[0][4]->setPiece(newPiece13);
 	blackPieces.push_back(newPiece13);
@@ -154,22 +155,77 @@ void Board::makeMove(Move* move)
 	// Capture the piece
 	if (newSquare(move, this)->getPiece() != nullptr)
 		if (move->getSide() == PlayerSide::WHITE) {
+			if (newSquare(move, this)->getPiece()->getName() == "King"){
+				gameIsOver = true;
+				winner = "Whites Win";
+			}
 			for (int i = 0; i < blackPieces.size(); i++)
 				if (newSquare(move, this)->getPiece() == blackPieces[i])
 					blackPieces.erase(blackPieces.begin() + i);
 		}
 		else {
+			if (newSquare(move, this)->getPiece()->getName() == "King") {
+				gameIsOver = true;
+				winner = "Blacks Win";
+			}
+
 			for (int i = 0; i < whitePieces.size(); i++)
 				if (newSquare(move, this)->getPiece() == whitePieces[i])
 					whitePieces.erase(whitePieces.begin() + i);
 		}
 
-	
+	if (move->getOldLocation()->getPiece()->hasMoved() == false &&
+		move->getOldLocation()->getPiece()->getName() == "King")
+	{
+		if (move->getOldLocation()->getY() - newSquare(move, this)->getY() == -2)
+			this->makeMove(new Move(board[move->getOldLocation()->getX()][7], 
+						board[move->getOldLocation()->getX()][5], move->getSide()));
+
+		if (move->getOldLocation()->getY() - newSquare(move, this)->getY() == 3)
+			this->makeMove(new Move(board[move->getOldLocation()->getX()][0],
+				board[move->getOldLocation()->getX()][2], move->getSide()));
+	}
+
 	newSquare(move, this)->setPiece(move->getOldLocation()->getPiece());
 
 	newSquare(move, this)->getPiece()->setPosition(newSquare(move, this));
 
 	move->getOldLocation()->removePiece();
+
+	//Promotion
+	if (newSquare(move, this)->getPiece()->getName() == "Pawn")
+	{
+		if (newSquare(move, this)->getX() == 0) {
+			
+			for (int i = 0; i < whitePieces.size(); i++)
+			{
+				if (whitePieces[i] == newSquare(move, this)->getPiece())
+					whitePieces.erase(whitePieces.begin() + i);
+
+			}
+
+			std::shared_ptr<ChessPiece> promotedPiece = std::make_shared<Queen>(newSquare(move, this), move->getSide());
+			newSquare(move, this)->setPiece(promotedPiece);
+
+			whitePieces.push_back(promotedPiece);
+		}
+
+		if (newSquare(move, this)->getX() == 7) {
+
+			for (int i = 0; i < blackPieces.size(); i++)
+			{
+				if (blackPieces[i] == newSquare(move, this)->getPiece())
+					blackPieces.erase(blackPieces.begin() + i);
+
+			}
+
+			std::shared_ptr<ChessPiece> promotedPiece = std::make_shared<Queen>(newSquare(move, this), move->getSide());
+			newSquare(move, this)->setPiece(promotedPiece);
+			blackPieces.push_back(promotedPiece);
+		}
+
+
+	}
 
 	delete(move);
 }
@@ -194,8 +250,9 @@ std::vector<std::shared_ptr<ChessPiece>> Board::getPieceList(PlayerSide side) {
 
 bool Board::isOver()
 {
-	if (whitePieces.size() == 0 || blackPieces.size() == 0)
-		return true;
+	return gameIsOver;
+}
 
-	return false;
+std::string Board::getWinner() {
+	return winner;
 }

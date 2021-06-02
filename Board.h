@@ -15,6 +15,8 @@ private:
 	std::vector<std::vector<std::shared_ptr<Square>>> board;
 	std::vector<std::shared_ptr<ChessPiece>> whitePieces;
 	std::vector<std::shared_ptr<ChessPiece>> blackPieces;
+	bool gameIsOver = false;
+	std::string winner;
 
 public:
 	Board();
@@ -30,5 +32,7 @@ public:
 
 	std::vector<std::shared_ptr<ChessPiece>> getPieceList(PlayerSide side);
 	void makeMove(Move* move);
+
+	std::string getWinner();
 };
 

@@ -80,11 +80,16 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 
 		player1->clearPoints();
 
-
+		if (board->isOver())
+			gameOver();
 
 		board->makeMove(player2->getMove(board));
 
 		updateGameGUI();
+
+		if (board->isOver())
+			gameOver();
+
 		return;
 	}
 
@@ -122,6 +127,11 @@ void StartFrame::playChessGame()
 	//	board->makeMove(player2->getMove(board));
 	
 
+}
+
+void StartFrame::gameOver()
+{
+	this->SetLabel(board->getWinner());
 }
 
 StartFrame::~StartFrame()

@@ -18,8 +18,12 @@ std::vector<std::shared_ptr<Square>>* Pawn::getLegalMoves(Board* board, PlayerSi
 
 	if (currentPlayerColor == PlayerSide::WHITE) {
 		if (position.lock()->getX() - 1 >= 0) {
-			if (sqrOff(-1, 0, position, board)->getPiece() == nullptr)
+			if (sqrOff(-1, 0, position, board)->getPiece() == nullptr) {
 				legalMoves->push_back(sqrOff(-1, 0, position, board));
+				if (firstMove && sqrOff(-2, 0, position, board)->getPiece() == nullptr) {
+					legalMoves->push_back(sqrOff(-2, 0, position, board));
+				}
+			}
 
 			if (position.lock()->getY() + 1 < 8)
 				if(sqrOff(-1, 1, position, board)->getPiece() != nullptr && 
@@ -35,8 +39,12 @@ std::vector<std::shared_ptr<Square>>* Pawn::getLegalMoves(Board* board, PlayerSi
 	else
 	{
 		if (position.lock()->getX() + 1 < 8) {
-			if (sqrOff(1, 0, position, board)->getPiece() == nullptr)
+			if (sqrOff(1, 0, position, board)->getPiece() == nullptr){
 				legalMoves->push_back(sqrOff(1, 0, position, board));
+				if (firstMove && sqrOff(2, 0, position, board)->getPiece() == nullptr) {
+					legalMoves->push_back(sqrOff(2, 0, position, board));
+				}
+		}
 
 			if (position.lock()->getY() + 1 < 8)
 				if (sqrOff(1, 1, position, board)->getPiece() != nullptr &&

@@ -12,6 +12,7 @@ std::shared_ptr<Square> ChessPiece::getPosition()
 void ChessPiece::setPosition(std::shared_ptr<Square> newPosition)
 {
 	position = newPosition;
+	firstMove = false;
 }
 
 PlayerSide ChessPiece::getOwnerOfChessPiece()
@@ -107,4 +108,8 @@ bool ChessPiece::endSquare(std::shared_ptr<Square> newSquare, std::vector<std::s
 	legalMoves->push_back(newSquare);
 	return false;
 
+}
+
+bool ChessPiece::hasMoved() {
+	return !firstMove;
 }

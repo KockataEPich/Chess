@@ -24,6 +24,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="EasyBot.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
+    <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="Pawn.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="EasyBot.h" />
     <ClInclude Include="GLobalHeader.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Pawn.h" />
@@ -51,6 +53,10 @@
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="StartFrame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="640px-Chess_Pieces_Sprite.svg.png" />
+    <Image Include="pawn.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

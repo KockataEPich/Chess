@@ -10,6 +10,7 @@ class Square;
 class Move
 {
 private:
+	bool castleUp = false;
 	std::weak_ptr<Square> oldLocation;
 	std::weak_ptr<Square> newLocation;
 	PlayerSide side;

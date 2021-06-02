@@ -15,6 +15,7 @@ protected:
 	std::weak_ptr<Square> position;
 	std::string name;
 	PlayerSide owner;
+	bool firstMove = true;
 
 public:
 	std::string getName();
@@ -31,5 +32,7 @@ public:
 	void addSideways(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
 
 	virtual std::vector<std::shared_ptr<Square>>* getLegalMoves(Board* board, PlayerSide currentPlayerColor) = 0;
+
+	bool hasMoved();
 };
 
