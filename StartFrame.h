@@ -5,7 +5,6 @@
 #include "Board.h"
 #include "Move.h";
 
-
 class Move;
 class Board;
 class Player;
@@ -22,7 +21,7 @@ public:
     std::vector<std::vector<wxButton*>> chessBoard;
     int isHumanPlayer = 1;
     Board* board;
-    HumanPlayer* player1;
+    Player* player1;
     Player* player2;
     wxGridSizer* grid;
 public:
@@ -39,6 +38,7 @@ public:
     void changeButtonLegalMoves(int x, int y, bool remove);
 
     void gameOver();
+
 
     
 };

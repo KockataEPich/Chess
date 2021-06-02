@@ -15,6 +15,7 @@ private:
 	std::weak_ptr<Square> newLocation;
 	PlayerSide side;
 public:
+	Move() {};
 	Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation, PlayerSide side);
 	~Move();
 	std::shared_ptr<Square> getOldLocation();

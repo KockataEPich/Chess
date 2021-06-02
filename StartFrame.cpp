@@ -3,6 +3,8 @@
 #include "EasyBot.h"
 #include "HumanPlayer.h"
 #include "Queen.h"
+#include "MediumBot.h"
+
 
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
 {
@@ -24,21 +26,29 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 			chessBoard[x][y]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &StartFrame::onButtonClicked, this);
 		}
 	}
+
 	this->SetSizer(grid);
 	grid->Layout();
 	//startButton = new wxButton(this, 10001, "Start the game already", wxPoint(10, 10), wxSize(50, 50));
 
 	board = new Board();
-
-	player1 = new HumanPlayer(PlayerSide::WHITE);
+	
+	player1 = new MediumBot(PlayerSide::WHITE);
 	player2 = new EasyBot(PlayerSide::BLACK);
 
+	isHumanPlayer = 0;
+
 	updateGameGUI();
+
+	
 	//startGame();
 };
 
 void StartFrame::onButtonClicked(wxCommandEvent& evt)
 {
+	if (isHumanPlayer == 0)
+		playChessGame();
+
 	int x = (evt.GetId() - 10000) % 8;
 	int y = (evt.GetId() - 10000) / 8;
 
@@ -106,7 +116,19 @@ void StartFrame::startGame()
 //Player1 and PLayer2 as parameters
 void StartFrame::playChessGame()
 {
-
+	for (int x = 0; x < 8; x++)
+		for (int y = 0; y < 8; y++) {
+			chessBoard[x][y]->Disable();
+		}
+	while (!board->isOver()) {
+		auto newMove = player1->getMove(board);
+		board->makeMove(newMove);
+		updateGameGUI();
+		wxMilliSleep(3000);
+		board->makeMove(player2->getMove(board));
+		updateGameGUI();
+		wxMilliSleep(3000);
+	}
 	//while (true)
 	//{
 

@@ -17,6 +17,7 @@ protected:
 	PlayerSide owner;
 	bool firstMove = true;
 
+
 public:
 	std::string getName();
 	std::shared_ptr<Square> getPosition();
@@ -34,5 +35,7 @@ public:
 	virtual std::vector<std::shared_ptr<Square>>* getLegalMoves(Board* board, PlayerSide currentPlayerColor) = 0;
 
 	bool hasMoved();
+
+	
 };
 

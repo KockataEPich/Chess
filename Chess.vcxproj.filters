@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Board">
       <UniqueIdentifier>{98f5ba68-941b-4763-8a2d-d072e6d1c45a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Evaluator">
+      <UniqueIdentifier>{954820bb-50c7-4d0c-8313-032a3e58dfa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Evaluator">
+      <UniqueIdentifier>{e970aeb0-ac6e-4937-9df6-7f7629a02d4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartFrame.cpp">
@@ -77,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="King.cpp">
       <Filter>Source Files\ChessPiece</Filter>
+    </ClCompile>
+    <ClCompile Include="MediumBotEvaluator.cpp">
+      <Filter>Source Files\Evaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="MediumBot.cpp">
+      <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="King.h">
       <Filter>Header Files\ChessPiece</Filter>
+    </ClInclude>
+    <ClInclude Include="Evaluator.h">
+      <Filter>Header Files\Evaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="MediumBotEvaluator.h">
+      <Filter>Header Files\Evaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="MediumBot.h">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
