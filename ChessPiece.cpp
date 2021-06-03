@@ -1,4 +1,11 @@
 #include "ChessPiece.h"
+#include "Pawn.h"
+#include "King.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "Rook.h"
+
 std::string ChessPiece::getName()
 {
 	return name;
@@ -46,7 +53,7 @@ void ChessPiece::addVertical(std::vector<std::shared_ptr<Square>>* legalMoves, B
 
 void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor){
 	auto currentPosition = position.lock();
-	for (int i = position.lock()->getY() + 1; i < 8; i++)
+	for (int i = currentPosition->getY() + 1; i < 8; i++)
 	{
 		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
 
@@ -54,7 +61,7 @@ void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>>* legalMoves,
 			break;
 	}
 
-	for (int i = position.lock()->getY() - 1; i >= 0; i--)
+	for (int i = currentPosition->getY() - 1; i >= 0; i--)
 	{
 		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
 
@@ -112,4 +119,21 @@ bool ChessPiece::endSquare(std::shared_ptr<Square> newSquare, std::vector<std::s
 
 bool ChessPiece::hasMoved() {
 	return !firstMove;
+}
+
+std::shared_ptr<ChessPiece> ChessPiece::clonePiece(std::shared_ptr<ChessPiece> piece, 
+												std::shared_ptr<Square> newPosition) {
+	if (piece->getName() == "Pawn")
+		return std::make_shared<Pawn>(newPosition, piece->getOwnerOfChessPiece());
+	if (piece->getName() == "King")
+		return std::make_shared<King>(newPosition, piece->getOwnerOfChessPiece());
+	if (piece->getName() == "Knight")
+		return std::make_shared<Knight>(newPosition, piece->getOwnerOfChessPiece());
+	if (piece->getName() == "Queen")
+		return std::make_shared<Queen>(newPosition, piece->getOwnerOfChessPiece());
+	if (piece->getName() == "Rook")
+		return std::make_shared<Rook>(newPosition, piece->getOwnerOfChessPiece());
+	if (piece->getName() == "Bishop")
+		return std::make_shared<Bishop>(newPosition, piece->getOwnerOfChessPiece());
+
 }

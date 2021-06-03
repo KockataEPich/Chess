@@ -125,13 +125,38 @@ Board::Board()
 
 }
 
-Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> board,
-	std::vector<std::shared_ptr<ChessPiece>> whitePieces,
-	std::vector<std::shared_ptr<ChessPiece>> blackPieces) {
+Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> givenBoard,
+	std::vector<std::shared_ptr<ChessPiece>> givenWhitePieces,
+	std::vector<std::shared_ptr<ChessPiece>> givenBlackPieces) {
 
-	this->board = board;
-	this->whitePieces = whitePieces;
-	this->blackPieces = blackPieces;
+	for (int i = 0; i < 8; i++)
+	{
+		std::vector<std::shared_ptr<Square>> rowVector;
+
+		board.push_back(rowVector);
+		for (int j = 0; j < 8; j++) {
+			std::shared_ptr<Square> newSquare = std::make_shared<Square>(i, j, nullptr);
+			board[i].push_back(newSquare);
+		}
+	}
+
+	for (int i = 0; i < 8; i++){
+		for (int j = 0; j < 8; j++) {
+
+			if (givenBoard[i][j]->getPiece() != nullptr){
+				std::shared_ptr<ChessPiece> piece = givenBoard[i][j]->getPiece()->clonePiece(
+					givenBoard[i][j]->getPiece(), board[i][j]);
+				
+				board[i][j]->setPiece(piece);
+				if (piece->getOwnerOfChessPiece() == PlayerSide::WHITE)
+					this->whitePieces.push_back(piece);
+				else
+					this->blackPieces.push_back(piece);
+			}
+				
+		}
+	}
+
 }
 
 std::vector<std::vector<std::shared_ptr<Square>>> Board::getBoard()
@@ -149,7 +174,8 @@ void Board::makeMove(Move* move)
 
 	auto newSquare = [](Move* move, Board* board)
 	{
-		return board->getBoard()[move->getNewLocation()->getX()][move->getNewLocation()->getY()];
+		return board->getBoard()[move->getNewLocation()->getX()]
+			[move->getNewLocation()->getY()];
 	};
 
 	// Capture the piece

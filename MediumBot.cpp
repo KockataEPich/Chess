@@ -13,7 +13,10 @@ Move* MediumBot::getMove(Board* board) {
 	std::vector<std::shared_ptr<ChessPiece>> myPieces = board->getPieceList(color);
 
 	int bestBoardValue = INT_MIN;
-	Move* bestMove = nullptr;
+	//Move* bestMove = nullptr;
+	std::shared_ptr<Square> bestInitMove = nullptr;
+	std::shared_ptr<Square> bestSecondMove = nullptr;
+
 
 	for (int i = 0; i < myPieces.size(); i++)
 	{
@@ -34,15 +37,16 @@ Move* MediumBot::getMove(Board* board) {
 			if (currentBoardValue > bestBoardValue)
 			{
 				bestBoardValue = currentBoardValue;
-				bestMove = move;
+				bestInitMove = myPieces[i]->getPosition();
+				bestSecondMove = legalMoves->at(j);
 			}
 			delete(newBoard);
 		}
 
 	}
 
-	return bestMove;
-
+	return new Move(bestInitMove, bestSecondMove, color);
+	//return new Move(board->getBoard()[1][0], board->getBoard()[2][0], color);
 }
 
 

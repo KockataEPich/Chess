@@ -36,6 +36,7 @@ public:
 
 	bool hasMoved();
 
-	
+	std::shared_ptr<ChessPiece> clonePiece(std::shared_ptr<ChessPiece> piece,
+													std::shared_ptr<Square> newPosition);
 };
 
