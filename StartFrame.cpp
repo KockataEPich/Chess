@@ -33,10 +33,10 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 
 	board = new Board();
 	
-	player1 = new MediumBot(PlayerSide::WHITE);
+	player1 = new HumanPlayer(PlayerSide::WHITE);
 	player2 = new MediumBot(PlayerSide::BLACK);
 
-	isHumanPlayer = 0;
+	isHumanPlayer = 1;
 
 	updateGameGUI();
 
@@ -124,30 +124,16 @@ void StartFrame::playChessGame()
 		auto newMove = player1->getMove(board);
 		board->makeMove(newMove);
 		updateGameGUI();
-		wxMilliSleep(3000);
+		if (board->isOver())
+			break;
+
+		wxMilliSleep(2000);
 		board->makeMove(player2->getMove(board));
 		updateGameGUI();
-		wxMilliSleep(3000);
+		wxMilliSleep(2000);
 	}
-	//while (true)
-	//{
 
-	//}
-
-	//while (!board->isOver())
-	//{
-	//	board->makeMove(player1->getMove(board));
-	//	updateGameGUI(board);
-
-	//}
-	
-	//updateGameGUI(board);
-
-	//	if (board->isOver())
-		//	break;
-
-	//	board->makeMove(player2->getMove(board));
-	
+	gameOver();
 
 }
 

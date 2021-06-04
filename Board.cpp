@@ -200,6 +200,7 @@ void Board::makeMove(Move* move)
 					whitePieces.erase(whitePieces.begin() + i);
 		}
 
+	// Castle up
 	if (move->getOldLocation()->getPiece()->hasMoved() == false &&
 		move->getOldLocation()->getPiece()->getName() == "King")
 	{
