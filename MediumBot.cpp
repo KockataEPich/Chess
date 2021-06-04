@@ -28,7 +28,10 @@ Move* MediumBot::getMove(Board* board) {
 				board->getPieceList(PlayerSide::BLACK));
 
 			Move* move = new Move(
-				myPieces[i]->getPosition(), legalMoves->at(j), color);
+				newBoard->getBoard()[myPieces[i]->getPosition()->getX()]
+				[myPieces[i]->getPosition()->getY()],
+				newBoard->getBoard()[legalMoves->at(j)->getX()]
+				[legalMoves->at(j)->getY()], color);
 
 			newBoard->makeMove(move);
 

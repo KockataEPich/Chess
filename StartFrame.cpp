@@ -34,7 +34,7 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 	board = new Board();
 	
 	player1 = new MediumBot(PlayerSide::WHITE);
-	player2 = new EasyBot(PlayerSide::BLACK);
+	player2 = new MediumBot(PlayerSide::BLACK);
 
 	isHumanPlayer = 0;
 
