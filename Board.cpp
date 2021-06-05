@@ -254,7 +254,6 @@ void Board::makeMove(Move* move)
 
 	}
 
-	delete(move);
 }
 
 Board::~Board()

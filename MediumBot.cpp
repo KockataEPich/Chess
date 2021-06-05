@@ -44,6 +44,7 @@ Move* MediumBot::getMove(Board* board) {
 				bestSecondMove = legalMoves->at(j);
 			}
 			delete(newBoard);
+			delete(move);
 		}
 
 	}

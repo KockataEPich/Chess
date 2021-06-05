@@ -9,18 +9,38 @@
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
 {
 	grid = new wxGridSizer(8, 8, 0, 0);
-
-
 	
+	wxImage image;
 
+	wxPNGHandler* handler = new wxPNGHandler();
+
+	image.AddHandler(handler);
+	//bitmap.
+	image.LoadFile("640px-Chess_Pieces_Sprite.svg.png");
+	// Extract the images of the pieces from the larger image.
+	wxBitmap b(image);
+
+	m_blackKing = b.GetSubBitmap(wxRect(5, 113, 100, 100));
+	m_blackQueen = b.GetSubBitmap(wxRect(110, 113, 100, 100));
+	m_blackBishop = b.GetSubBitmap(wxRect(215, 113, 100, 100));
+	m_blackKnight = b.GetSubBitmap(wxRect(323, 113, 100, 100));
+	m_blackRook = b.GetSubBitmap(wxRect(433, 113, 100, 100));
+	m_blackPawn = b.GetSubBitmap(wxRect(535, 113, 100, 100));
+
+	m_whiteKing = b.GetSubBitmap(wxRect(5, 5, 100, 100));
+	m_whiteQueen = b.GetSubBitmap(wxRect(110, 5, 100, 100));
+	m_whiteBishop = b.GetSubBitmap(wxRect(215, 5, 100, 100));
+	m_whiteKnight = b.GetSubBitmap(wxRect(323, 5, 100, 100));
+	m_whiteRook = b.GetSubBitmap(wxRect(433, 5, 100, 100));
+	m_whitePawn = b.GetSubBitmap(wxRect(535, 5, 100, 100));
 
 	for (int x = 0; x < 8; x++)
 	{
-		std::vector<wxButton*> newVector;
+		std::vector<wxBitmapButton*> newVector;
 		chessBoard.push_back(newVector);
 		for (int y = 0; y < 8; y++)
 		{
-			chessBoard[x].push_back(new wxButton(this, 10000 + (y * 8 + x)));
+			chessBoard[x].push_back(new wxBitmapButton(this, 10000 + (y * 8 + x), wxBitmap()));
 			grid->Add(chessBoard[x][y], 1, wxEXPAND | wxALL);
 
 			chessBoard[x][y]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &StartFrame::onButtonClicked, this);
@@ -29,14 +49,17 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 
 	this->SetSizer(grid);
 	grid->Layout();
-	//startButton = new wxButton(this, 10001, "Start the game already", wxPoint(10, 10), wxSize(50, 50));
+	
+	
+
+//	startButton = new wxBitmapButton(this, 10001, m_blackKing, wxPoint(10, 10), wxSize(50, 50));
 
 	board = new Board();
 	
-	player1 = new HumanPlayer(PlayerSide::WHITE);
+	player1 = new MediumBot(PlayerSide::WHITE);
 	player2 = new MediumBot(PlayerSide::BLACK);
 
-	isHumanPlayer = 1;
+	isHumanPlayer = 0;
 
 	updateGameGUI();
 
@@ -82,9 +105,10 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 	{
 		player1->setSecondClickedSquare(board->getBoard()[x][y]);
 
-		board->makeMove(player1->getMove(board));
 
-		updateGameGUI();
+		auto newMove = player1->getMove(board);
+		board->makeMove(newMove);
+		updateGameGUI(newMove->getOldLocation(), newMove->getNewLocation());
 
 		changeButtonLegalMoves(x, y, true);
 
@@ -93,14 +117,16 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 		if (board->isOver())
 			gameOver();
 
-		board->makeMove(player2->getMove(board));
+		delete(newMove);
+		newMove = player2->getMove(board);
+		board->makeMove(newMove);
 
-		updateGameGUI();
+
+		updateGameGUI(newMove->getOldLocation(), newMove->getNewLocation());
+		delete(newMove);
 
 		if (board->isOver())
 			gameOver();
-
-		return;
 	}
 
 	player1->clearPoints();
@@ -121,18 +147,26 @@ void StartFrame::playChessGame()
 			chessBoard[x][y]->Disable();
 		}
 	while (!board->isOver()) {
+
 		auto newMove = player1->getMove(board);
 		board->makeMove(newMove);
-		updateGameGUI();
+		updateGameGUI(newMove->getOldLocation(), newMove->getNewLocation());
+		
 		if (board->isOver())
 			break;
 
 		wxMilliSleep(2000);
-		board->makeMove(player2->getMove(board));
-		updateGameGUI();
-		wxMilliSleep(2000);
-	}
 
+		delete(newMove);
+		newMove = player2->getMove(board);
+		board->makeMove(newMove);
+
+
+		updateGameGUI(newMove->getOldLocation(), newMove->getNewLocation());
+		wxMilliSleep(2000);
+		delete(newMove);
+	}
+	
 	gameOver();
 
 }
@@ -158,16 +192,120 @@ StartFrame::~StartFrame()
 
 
 void StartFrame::updateGameGUI(){
+
+	
+
 	for(int i = 0; i < 8; i++)
 		for (int j = 0; j < 8; j++)
 		{
-			if (board->getBoard()[i][j]->getPiece() == nullptr)
-				chessBoard[i][j]->SetLabel("");
-			else if (board->getBoard()[i][j]->getPiece()->getOwnerOfChessPiece() == PlayerSide::WHITE)
-				chessBoard[i][j]->SetLabel("W_" + board->getBoard()[i][j]->getPiece()->getName());
-			else
-				chessBoard[i][j]->SetLabel("B_" + board->getBoard()[i][j]->getPiece()->getName());
+			chessBoard[i][j]->Disable();
+			chessBoard[i][j]->SetBitmap(wxBitmap());
+			chessBoard[i][j]->Enable();
+
+			if (board->getBoard()[i][j]->getPiece() == nullptr) {
+				
+				if (isHumanPlayer == 0)
+					chessBoard[i][j]->Disable();
+			}
+
+			else if (board->getBoard()[i][j]->getPiece()->getOwnerOfChessPiece() == PlayerSide::WHITE) {
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Pawn") {
+					chessBoard[i][j]->SetBitmap(m_whitePawn);
+				}
+					//chessBoard[i][j]->SetBitmap(m_whitePawn);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Rook")
+					chessBoard[i][j]->SetBitmap(m_whiteRook);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Knight")
+					chessBoard[i][j]->SetBitmap(m_whiteKnight);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "King")
+					chessBoard[i][j]->SetBitmap(m_whiteKing);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Bishop")
+					chessBoard[i][j]->SetBitmap(m_whiteBishop);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Queen")
+					chessBoard[i][j]->SetBitmap(m_whiteQueen);
+			}
+
+			else  {
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Pawn")
+					chessBoard[i][j]->SetBitmap(m_blackPawn);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Rook")
+					chessBoard[i][j]->SetBitmap(m_blackRook);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Knight")
+					chessBoard[i][j]->SetBitmap(m_blackKnight);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "King")
+					chessBoard[i][j]->SetBitmap(m_blackKing);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Bishop")
+					chessBoard[i][j]->SetBitmap(m_blackBishop);
+				if (board->getBoard()[i][j]->getPiece()->getName() == "Queen")
+					chessBoard[i][j]->SetBitmap(m_blackQueen);
+			}
+
 		}
+
+	this->Update();
+}
+
+
+void StartFrame::updateGameGUI(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation) {
+
+	chessBoard[oldLocation->getX()][oldLocation->getY()]->Disable();
+	chessBoard[oldLocation->getX()][oldLocation->getY()]->SetBitmap(wxBitmap());
+	chessBoard[oldLocation->getX()][oldLocation->getY()]->Enable();
+
+	if (isHumanPlayer == 0)
+		chessBoard[oldLocation->getX()][oldLocation->getY()]->Disable();
+
+	chessBoard[newLocation->getX()][newLocation->getY()]->Disable();
+	chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(wxBitmap());
+	chessBoard[newLocation->getX()][newLocation->getY()]->Enable();
+
+	if (isHumanPlayer == 0)
+		chessBoard[newLocation->getX()][newLocation->getY()]->Disable();
+
+
+	if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getOwnerOfChessPiece() == PlayerSide::WHITE) {
+		if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Pawn") {
+			chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whitePawn);
+		}
+		//chessBoard[i][j]->SetBitmap(m_whitePawn);
+		if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Rook")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whiteRook);
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Knight")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whiteKnight);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "King")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whiteKing);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Bishop")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whiteBishop);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Queen")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_whiteQueen);
+			}
+
+			else {
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Pawn")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackPawn);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Rook")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackRook);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Knight")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackKnight);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "King")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackKing);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Bishop")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackBishop);
+
+				if (board->getBoard()[newLocation->getX()][newLocation->getY()]->getPiece()->getName() == "Queen")
+					chessBoard[newLocation->getX()][newLocation->getY()]->SetBitmap(m_blackQueen);
+			}
+
+		
+
+	this->Update();
 }
 
 
