@@ -18,7 +18,7 @@ Board::Board()
 			board[i].push_back(newSquare);
 		}
 	}
-	
+
 	/////////////////////////////////////////////// WHITE INIT ///////////////////////////////
 
 	for (int y = 0; y < 8; y++)
@@ -70,7 +70,7 @@ Board::Board()
 	board[7][7]->setPiece(newPiece8);
 	whitePieces.push_back(newPiece8);
 
-	
+
 
 
 	//////////////////////////////////////////////////// BLACK INIT /////////////////////////////
@@ -140,20 +140,20 @@ Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> givenBoard,
 		}
 	}
 
-	for (int i = 0; i < 8; i++){
+	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 
-			if (givenBoard[i][j]->getPiece() != nullptr){
+			if (givenBoard[i][j]->getPiece() != nullptr) {
 				std::shared_ptr<ChessPiece> piece = givenBoard[i][j]->getPiece()->clonePiece(
 					givenBoard[i][j]->getPiece(), board[i][j]);
-				
+
 				board[i][j]->setPiece(piece);
 				if (piece->getOwnerOfChessPiece() == PlayerSide::WHITE)
 					this->whitePieces.push_back(piece);
 				else
 					this->blackPieces.push_back(piece);
 			}
-				
+
 		}
 	}
 
@@ -162,11 +162,6 @@ Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> givenBoard,
 std::vector<std::vector<std::shared_ptr<Square>>> Board::getBoard()
 {
 	return board;
-}
-
-Board* Board::duplicateBoard()
-{
-	return new Board(this->board, this->whitePieces, this->blackPieces);
 }
 
 void Board::makeMove(Move* move)
@@ -178,81 +173,20 @@ void Board::makeMove(Move* move)
 			[move->getNewLocation()->getY()];
 	};
 
-	// Capture the piece
-	if (newSquare(move, this)->getPiece() != nullptr)
-		if (move->getSide() == PlayerSide::WHITE) {
-			if (newSquare(move, this)->getPiece()->getName() == "King"){
-				gameIsOver = true;
-				winner = "Whites Win";
-			}
-			for (int i = 0; i < blackPieces.size(); i++)
-				if (newSquare(move, this)->getPiece() == blackPieces[i])
-					blackPieces.erase(blackPieces.begin() + i);
-		}
-		else {
-			if (newSquare(move, this)->getPiece()->getName() == "King") {
-				gameIsOver = true;
-				winner = "Blacks Win";
-			}
+	auto NextSquarePiece = newSquare(move, this)->getPiece();
 
-			for (int i = 0; i < whitePieces.size(); i++)
-				if (newSquare(move, this)->getPiece() == whitePieces[i])
-					whitePieces.erase(whitePieces.begin() + i);
-		}
+	checkPieceAndDeleteIfNecessary(NextSquarePiece, move);
 
-	// Castle up
-	if (move->getOldLocation()->getPiece()->hasMoved() == false &&
-		move->getOldLocation()->getPiece()->getName() == "King")
-	{
-		if (move->getOldLocation()->getY() - newSquare(move, this)->getY() == -2)
-			this->makeMove(new Move(board[move->getOldLocation()->getX()][7], 
-						board[move->getOldLocation()->getX()][5], move->getSide()));
-
-		if (move->getOldLocation()->getY() - newSquare(move, this)->getY() == 3)
-			this->makeMove(new Move(board[move->getOldLocation()->getX()][0],
-				board[move->getOldLocation()->getX()][2], move->getSide()));
-	}
+	checkForCastleUp(move, newSquare(move, this));
 
 	newSquare(move, this)->setPiece(move->getOldLocation()->getPiece());
-
 	newSquare(move, this)->getPiece()->setPosition(newSquare(move, this));
-
 	move->getOldLocation()->removePiece();
 
+	handlePiecePromotion(newSquare(move, this), move);
+
 	//Promotion
-	if (newSquare(move, this)->getPiece()->getName() == "Pawn")
-	{
-		if (newSquare(move, this)->getX() == 0) {
-			
-			for (int i = 0; i < whitePieces.size(); i++)
-			{
-				if (whitePieces[i] == newSquare(move, this)->getPiece())
-					whitePieces.erase(whitePieces.begin() + i);
 
-			}
-
-			std::shared_ptr<ChessPiece> promotedPiece = std::make_shared<Queen>(newSquare(move, this), move->getSide());
-			newSquare(move, this)->setPiece(promotedPiece);
-
-			whitePieces.push_back(promotedPiece);
-		}
-
-		if (newSquare(move, this)->getX() == 7) {
-
-			for (int i = 0; i < blackPieces.size(); i++)
-			{
-				if (blackPieces[i] == newSquare(move, this)->getPiece())
-					blackPieces.erase(blackPieces.begin() + i);
-
-			}
-
-			std::shared_ptr<ChessPiece> promotedPiece = std::make_shared<Queen>(newSquare(move, this), move->getSide());
-			newSquare(move, this)->setPiece(promotedPiece);
-			blackPieces.push_back(promotedPiece);
-		}
-
-
-	}
 
 }
 
@@ -263,15 +197,32 @@ Board::~Board()
 		board[i].clear();
 	}
 	board.clear();
-	
+
 }
 
 
 std::vector<std::shared_ptr<ChessPiece>> Board::getPieceList(PlayerSide side) {
 	if (side == PlayerSide::WHITE)
 		return whitePieces;
-	
+
 	return blackPieces;
+}
+
+void Board::eraseElement(std::shared_ptr<ChessPiece> pieceToDelete, PlayerSide color) {
+	if (color == PlayerSide::WHITE)
+		for (int i = 0; i < whitePieces.size(); i++)
+			if (pieceToDelete == whitePieces[i]) {
+				whitePieces.erase(whitePieces.begin() + i);
+				return;
+			}
+
+
+	for (int i = 0; i < blackPieces.size(); i++)
+		if (pieceToDelete == blackPieces[i]) {
+			blackPieces.erase(blackPieces.begin() + i);
+			break;
+		}
+	return;
 }
 
 bool Board::isOver()
@@ -282,3 +233,61 @@ bool Board::isOver()
 std::string Board::getWinner() {
 	return winner;
 }
+
+
+void Board::checkPieceAndDeleteIfNecessary(std::shared_ptr<ChessPiece> newPiece, Move* move) {
+	if (newPiece != nullptr) {
+		if (newPiece->getName() == "King") {
+			gameIsOver = true;
+			winner = newPiece->getOwnerOfChessPiece().getOpposite().toString() + " Wins!";
+		}
+		else
+			eraseElement(newPiece, move->getSide().getOpposite());
+	}
+}
+
+// Method that checks if the move is intended to be a castleUp
+void Board::checkForCastleUp(Move* move, std::shared_ptr<Square> newSquare) {
+	// Castle up
+	if (move->getOldLocation()->getPiece()->hasMoved() == false &&
+		move->getOldLocation()->getPiece()->getName() == "King")
+	{
+		if (move->getOldLocation()->getY() - newSquare->getY() == -2)
+			this->makeMove(new Move(board[move->getOldLocation()->getX()][7],
+				board[move->getOldLocation()->getX()][5], move->getSide()));
+
+		if (move->getOldLocation()->getY() - newSquare->getY() == 3)
+			this->makeMove(new Move(board[move->getOldLocation()->getX()][0],
+				board[move->getOldLocation()->getX()][2], move->getSide()));
+	}
+
+	//move->setCastleUp(true);
+}
+
+// Method that promotes the pawn when it reaches the end of the opposite side.
+// Currently only promotos to a Queen
+void Board::handlePiecePromotion(std::shared_ptr<Square> newSquare, Move* move) {
+	auto movedPiece = newSquare->getPiece();
+	int x = movedPiece->getPosition()->getX();
+	if (movedPiece->getName() == "Pawn" && (x == 7 || x == 0)) {
+		std::shared_ptr<ChessPiece> promotedPiece = std::make_shared<Queen>(newSquare, move->getSide());
+		newSquare->setPiece(promotedPiece);
+
+		if (move->getSide() == PlayerSide::WHITE)
+			whitePieces.push_back(promotedPiece);
+		else
+			blackPieces.push_back(promotedPiece);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

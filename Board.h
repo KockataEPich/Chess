@@ -23,7 +23,7 @@ public:
 	~Board();
 	Board(std::vector<std::vector<std::shared_ptr<Square>>> board,
 		std::vector<std::shared_ptr<ChessPiece>> whitePieces,
-	std::vector<std::shared_ptr<ChessPiece>> blackPieces);
+		std::vector<std::shared_ptr<ChessPiece>> blackPieces);
 
 	std::vector<std::vector<std::shared_ptr<Square>>>  getBoard();
 	Board* duplicateBoard();
@@ -34,5 +34,9 @@ public:
 	void makeMove(Move* move);
 
 	std::string getWinner();
-};
 
+	void eraseElement(std::shared_ptr<ChessPiece> pieceToDelete, PlayerSide color);
+	void checkPieceAndDeleteIfNecessary(std::shared_ptr<ChessPiece> newPiece, Move* move);
+	void checkForCastleUp(Move* move, std::shared_ptr<Square> newSquare);
+	void handlePiecePromotion(std::shared_ptr<Square> newSquare, Move* move);
+};
