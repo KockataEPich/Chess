@@ -11,12 +11,12 @@ std::string ChessPiece::getName()
 	return name;
 }
 
-std::shared_ptr<Square> ChessPiece::getPosition()
+shr_sqr ChessPiece::getPosition()
 {
 	return position.lock();
 }
 
-void ChessPiece::setPosition(std::shared_ptr<Square> newPosition)
+void ChessPiece::setPosition(shr_sqr newPosition)
 {
 	position = newPosition;
 	firstMove = false;
@@ -29,83 +29,82 @@ PlayerSide ChessPiece::getOwner()
 
 
 
-void ChessPiece::addVertical(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor){
+void ChessPiece::addVertical(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
 	
-	auto currentPosition = position.lock();
+	auto pos = position.lock();
 	
-	for (int i = currentPosition->getX() + 1; i < 8; i++)
+	for (int i = pos->getX() + 1; i < 8; i++)
 	{
 
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][currentPosition->getY()];
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][pos->getY()];
+		if (endSquare(newSquare, legalMoves, pColor))
 			break;
 	}
 
-	for (int i = currentPosition->getX() - 1; i >= 0; i--)
+	for (int i = pos->getX() - 1; i >= 0; i--)
 	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][currentPosition->getY()];
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][pos->getY()];
 
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-}
-
-
-void ChessPiece::addHorizontal(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor){
-	auto currentPosition = position.lock();
-	for (int i = currentPosition->getY() + 1; i < 8; i++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
-
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-
-	for (int i = currentPosition->getY() - 1; i >= 0; i--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
-
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-}
-void ChessPiece::addSideways(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor){
-	auto currentPosition = position.lock();
-	for (int i = currentPosition->getX() + 1, j = currentPosition->getY() - 1; i < 8 && j >= 0; i++, j--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-
-	for (int i = currentPosition->getX() - 1, j = currentPosition->getY() + 1; i >= 0 && j < 8; i--, j++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-
-	for (int i = currentPosition->getX() + 1, j = currentPosition->getY() + 1; i < 8 && j < 8; i++, j++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
-			break;
-	}
-
-	for (int i = currentPosition->getX() - 1, j = currentPosition->getY() - 1; i >= 0 && j >= 0; i--, j--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, currentPlayerColor))
+		if (endSquare(newSquare, legalMoves, pColor))
 			break;
 	}
 }
 
-bool ChessPiece::endSquare(std::shared_ptr<Square> newSquare, std::vector<std::shared_ptr<Square>>* legalMoves,
-	PlayerSide currentPlayerColor)
+
+void ChessPiece::addHorizontal(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
+	auto pos = position.lock();
+	for (int i = pos->getY() + 1; i < 8; i++)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[pos->getX()][i];
+
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+
+	for (int i = pos->getY() - 1; i >= 0; i--)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[pos->getX()][i];
+
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+}
+void ChessPiece::addSideways(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
+	auto pos = position.lock();
+	for (int i = pos->getX() + 1, j = pos->getY() - 1; i < 8 && j >= 0; i++, j--)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+
+	for (int i = pos->getX() - 1, j = pos->getY() + 1; i >= 0 && j < 8; i--, j++)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+
+	for (int i = pos->getX() + 1, j = pos->getY() + 1; i < 8 && j < 8; i++, j++)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+
+	for (int i = pos->getX() - 1, j = pos->getY() - 1; i >= 0 && j >= 0; i--, j--)
+	{
+		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
+		if (endSquare(newSquare, legalMoves, pColor))
+			break;
+	}
+}
+
+bool ChessPiece::endSquare(shr_sqr newSquare, sqr_vec* legalMoves, PlayerSide pColor)
 {
 	if (newSquare->getPiece() != nullptr)
 	{
-		if(newSquare->getPiece()->getOwner() == currentPlayerColor)
+		if(newSquare->getPiece()->getOwner() == pColor)
 			return true;
 
 		legalMoves->push_back(newSquare);
@@ -121,8 +120,24 @@ bool ChessPiece::hasMoved() {
 	return !firstMove;
 }
 
-std::shared_ptr<ChessPiece> ChessPiece::clonePiece(std::shared_ptr<ChessPiece> piece, 
-												std::shared_ptr<Square> newPosition) {
+void ChessPiece::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor) {
+	auto pos = position.lock();
+	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
+		return;
+
+	auto squareToMove = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
+
+	if (squareToMove->getPiece() == nullptr) {
+		legalMoves->push_back(squareToMove);
+		return;
+	}
+
+	if (squareToMove->getPiece()->getOwner() != pColor)
+		legalMoves->push_back(squareToMove);
+
+}
+
+shr_piece ChessPiece::clonePiece(shr_piece piece, shr_sqr newPosition) {
 	if (piece->getName() == "Pawn")
 		return std::make_shared<Pawn>(newPosition, piece->getOwner());
 	if (piece->getName() == "King")

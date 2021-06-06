@@ -9,12 +9,12 @@
 class Board;
 class Square;
 
-typedef std::vector<std::shared_ptr<Square>> sqr_vec;
+
 
 class ChessPiece
 {
 protected:
-	std::weak_ptr<Square> position;
+	wk_sqr position;
 	std::string name;
 	PlayerSide owner;
 	bool firstMove = true;
@@ -22,26 +22,25 @@ protected:
 
 public:
 	std::string getName();
-	std::shared_ptr<Square> getPosition();
-	void setPosition(std::shared_ptr<Square> newPosition);
+	shr_sqr getPosition();
+	void setPosition(shr_sqr newPosition);
 
-	bool endSquare(std::shared_ptr<Square> newSquare, std::vector<std::shared_ptr<Square>>* legalMoves, 
-		PlayerSide currentPlayerColor);
+	bool endSquare(shr_sqr newSquare, sqr_vec* legalMoves, PlayerSide pColor);
 
 	PlayerSide getOwner();
 
-	void addHorizontal(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
-	void addVertical(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
-	void addSideways(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
+	void addHorizontal(sqr_vec* legalMoves, Board* board, PlayerSide pColor);
+	void addVertical(sqr_vec* legalMoves, Board* board, PlayerSide pColor);
+	void addSideways(sqr_vec* legalMoves, Board* board, PlayerSide pColor);
 
-	virtual std::vector<std::shared_ptr<Square>>* getLegalMoves(Board* board, PlayerSide currentPlayerColor) = 0;
+	virtual sqr_vec* getLegalMoves(Board* board, PlayerSide pColor) = 0;
 
 	bool hasMoved();
 
-	std::shared_ptr<ChessPiece> clonePiece(std::shared_ptr<ChessPiece> piece,
-													std::shared_ptr<Square> newPosition);
+	shr_piece clonePiece(shr_piece piece, shr_sqr newPosition);
 
-
+	void addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor);
+	
 	bool inRange(int x)
 	{
 		return x < 8 && x >= 0;

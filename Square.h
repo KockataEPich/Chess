@@ -2,7 +2,9 @@
 #include "ChessPiece.h"
 #include <memory>
 
+
 class ChessPiece;
+
 
 class Square
 {
@@ -22,3 +24,7 @@ public:
 	void removePiece();
 };
 
+typedef std::vector<std::shared_ptr<Square>> sqr_vec;
+typedef std::shared_ptr<ChessPiece> shr_piece;
+typedef std::shared_ptr<Square> shr_sqr;
+typedef std::weak_ptr<Square> wk_sqr;
