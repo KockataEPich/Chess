@@ -9,34 +9,35 @@
 class Square;
 class Move;
 
+typedef std::vector<std::vector<std::shared_ptr<Square>>> board_vec;
+typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
+typedef std::shared_ptr<ChessPiece> shr_piece;
+typedef std::shared_ptr<Square> shr_sqr;
+typedef std::vector <std::shared_ptr<Square>> sqr_vec;
+
 class Board
 {
 private:
-	std::vector<std::vector<std::shared_ptr<Square>>> board;
-	std::vector<std::shared_ptr<ChessPiece>> whitePieces;
-	std::vector<std::shared_ptr<ChessPiece>> blackPieces;
+	board_vec board;
+	piece_vec whitePieces;
+	piece_vec blackPieces;
 	bool gameIsOver = false;
 	std::string winner;
 
 public:
 	Board();
+	Board(board_vec board);
 	~Board();
-	Board(std::vector<std::vector<std::shared_ptr<Square>>> board,
-		std::vector<std::shared_ptr<ChessPiece>> whitePieces,
-		std::vector<std::shared_ptr<ChessPiece>> blackPieces);
 
-	std::vector<std::vector<std::shared_ptr<Square>>>  getBoard();
-	Board* duplicateBoard();
-
+	board_vec  getBoard();
+	std::string getWinner();
 	bool isOver();
-
-	std::vector<std::shared_ptr<ChessPiece>> getPieceList(PlayerSide side);
+	piece_vec getPieceList(PlayerSide side);
+	
 	void makeMove(Move* move);
 
-	std::string getWinner();
-
-	void eraseElement(std::shared_ptr<ChessPiece> pieceToDelete, PlayerSide color);
-	void checkPieceAndDeleteIfNecessary(std::shared_ptr<ChessPiece> newPiece, Move* move);
-	void checkForCastleUp(Move* move, std::shared_ptr<Square> newSquare);
-	void handlePiecePromotion(std::shared_ptr<Square> newSquare, Move* move);
+	void eraseElement(shr_piece pieceToDelete, PlayerSide color);
+	void checkPieceAndDeleteIfNecessary(shr_piece newPiece, Move* move);
+	void checkForCastleUp(Move* move, shr_sqr newSquare);
+	void handlePiecePromotion(shr_sqr newSquare, Move* move);
 };

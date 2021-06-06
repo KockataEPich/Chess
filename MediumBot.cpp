@@ -23,9 +23,7 @@ Move* MediumBot::getMove(Board* board) {
 		std::vector<std::shared_ptr<Square>>* legalMoves = myPieces[i]->getLegalMoves(board, color);
 		for(int j = 0; j < legalMoves->size(); j++) {
 
-			Board* newBoard = new Board(board->getBoard(),
-				board->getPieceList(PlayerSide::WHITE),
-				board->getPieceList(PlayerSide::BLACK));
+			Board* newBoard = new Board(board->getBoard());
 
 			Move* move = new Move(
 				newBoard->getBoard()[myPieces[i]->getPosition()->getX()]
