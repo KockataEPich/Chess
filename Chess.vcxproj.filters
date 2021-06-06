@@ -90,6 +90,9 @@
     <ClCompile Include="MediumBot.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HardBot.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StartFrame.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files\Evaluator</Filter>
     </ClInclude>
     <ClInclude Include="MediumBot.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HardBot.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>

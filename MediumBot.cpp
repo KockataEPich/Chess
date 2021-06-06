@@ -3,10 +3,7 @@
 #include <fstream>
 #include <random>
 
-MediumBot::MediumBot(PlayerSide color)
-{
-	this->color = color;
-}
+MediumBot::MediumBot(PlayerSide color){ this->color = color; }
 
 Move* MediumBot::getMove(Board* board) {
 	//The input would be a on click input
@@ -44,9 +41,7 @@ Move* MediumBot::getMove(Board* board) {
 			delete(newBoard);
 			delete(move);
 		}
-
 	}
-
 	return new Move(bestInitMove, bestSecondMove, color);
 	//return new Move(board->getBoard()[1][0], board->getBoard()[2][0], color);
 }

@@ -4,6 +4,7 @@
 #include "HumanPlayer.h"
 #include "Queen.h"
 #include "MediumBot.h"
+#include "HardBot.h"
 
 
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
@@ -57,7 +58,7 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 	board = new Board();
 
 	player1 = new HumanPlayer(PlayerSide::WHITE);
-	player2 = new EasyBot(PlayerSide::BLACK);
+	player2 = new HardBot(PlayerSide::BLACK);
 
 	isHumanPlayer = 1;
 

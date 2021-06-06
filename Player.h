@@ -7,6 +7,9 @@
 class Move;
 class Board;
 
+typedef std::vector<std::shared_ptr<Square>> sqr_vec;
+typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
+typedef std::shared_ptr<Square> shr_sqr;
 class Player
 {
 protected:
@@ -16,15 +19,15 @@ protected:
 	// Strategy strategy
 
 public:
-	std::vector<std::shared_ptr<ChessPiece>> getPieces(Board* board);
+	piece_vec getPieces(Board* board);
 	PlayerSide getColor();
 	virtual Move* getMove(Board* board) = 0;
 
-	std::shared_ptr<Square> getFirstClicked();
-	void setFirstClicked(std::shared_ptr<Square> square);
+	shr_sqr getFirstClicked();
+	void setFirstClicked(shr_sqr square);
 
-	std::shared_ptr<Square> getSecondClickedSquare();
-	void setSecondClickedSquare(std::shared_ptr<Square> sqaure);
+	shr_sqr getSecondClickedSquare();
+	void setSecondClickedSquare(shr_sqr sqaure);
 
 	void clearPoints();
 };

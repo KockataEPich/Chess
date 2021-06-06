@@ -23,6 +23,7 @@
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="EasyBot.cpp" />
+    <ClCompile Include="HardBot.cpp" />
     <ClCompile Include="MediumBot.cpp" />
     <ClCompile Include="MediumBotEvaluator.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="EasyBot.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="GLobalHeader.h" />
+    <ClInclude Include="HardBot.h" />
     <ClInclude Include="MediumBot.h" />
     <ClInclude Include="MediumBotEvaluator.h" />
     <ClInclude Include="HumanPlayer.h" />
