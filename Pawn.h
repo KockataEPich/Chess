@@ -5,10 +5,9 @@ class Pawn : public ChessPiece
 private:
 	int startingPositionX;
 public:
-	Pawn();
+	Pawn() {};
 	Pawn(std::shared_ptr<Square> position, PlayerSide playerSide);
-	std::vector<std::shared_ptr<Square>>* getLegalMoves(Board* board, PlayerSide currentPlayerColor);
-	void addMoveIfNecessary(int xOff, int yOff, std::vector<std::shared_ptr<Square>>*
-		legalMoves, Board* board, PlayerSide pColor);
+	sqr_vec* getLegalMoves(Board* board, PlayerSide currentPlayerColor);
+	bool addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor);
 };
 

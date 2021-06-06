@@ -1,91 +1,70 @@
 #include "King.h"
-
-King::King(std::shared_ptr<Square> position, PlayerSide playerSide)
-{
+// Constructor
+King::King(std::shared_ptr<Square> position, PlayerSide playerSide){
 	this->name = "King";
 	this->position = position;
 	this->owner = playerSide;
 }
 
-std::vector<std::shared_ptr<Square>>* King::getLegalMoves(Board* board, PlayerSide currentPlayerColor)
-{
-	std::vector<std::shared_ptr<Square>>* legalMoves = new std::vector<std::shared_ptr<Square>>();
+sqr_vec* King::getLegalMoves(Board* board, PlayerSide currentPlayerColor){
+	sqr_vec* legalMoves = new std::vector<std::shared_ptr<Square>>();
 
+	auto pos = position.lock();
 
-	auto currentPosition = position.lock();
+	// Add the move on right,left,up and down positions
+	addSquareIfPossible( 0,  1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible( 0, -1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible( 1,  0, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible(-1,  0, legalMoves, board, currentPlayerColor);
+	
+	// Add square of bottom right, top right, bottom left and top left
+	addSquareIfPossible( 1,  1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible(-1,  1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible( 1, -1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible(-1, -1, legalMoves, board, currentPlayerColor);
 
-	if (currentPosition->getY() + 1 < 8) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][currentPosition->getY() + 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getY() - 1 >= 0) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][currentPosition->getY() - 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getX() + 1 < 8) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() + 1][currentPosition->getY()];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getX() - 1 >= 0) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() - 1][currentPosition->getY()];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-
-	for (int i = currentPosition->getX() + 1, j = currentPosition->getY() - 1; i < 8 && j >= 0; i++, j--)
-
-	if (currentPosition->getX() + 1 < 8 && currentPosition->getY() - 1 >= 0) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() + 1][currentPosition->getY() - 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getX() - 1 >= 0 && currentPosition->getY() + 1 < 8) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() - 1][currentPosition->getY() + 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getX() - 1 >= 0 && currentPosition->getY() - 1 >= 0) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() - 1][currentPosition->getY() - 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (currentPosition->getX() + 1 < 8 && currentPosition->getY() + 1 < 8) {
-		std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX() + 1][currentPosition->getY() + 1];
-		endSquare(newSquare, legalMoves, currentPlayerColor);
-	}
-
-	if (firstMove) {
-		int rightMoves = 0;
-		for (int i = currentPosition->getY() + 1; i < 7; i++)
-		{
-			std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
-
-			if (newSquare->getPiece() == nullptr)
-				rightMoves++;
-		}
-
-		if (rightMoves == 2 && board->getBoard()[currentPosition->getX()][7]->getPiece() != nullptr && 
-										board->getBoard()[currentPosition->getX()][7]->getPiece()->hasMoved() == false)
-			legalMoves->push_back(board->getBoard()[currentPosition->getX()][6]);
-
-		int leftMoves = 0;
-		for (int i = currentPosition->getY() - 1; i >= 0; i--)
-		{
-			std::shared_ptr<Square> newSquare = board->getBoard()[currentPosition->getX()][i];
-
-			if (newSquare->getPiece() == nullptr)
-				leftMoves++;
-		}
-
-		if (leftMoves == 3 && board->getBoard()[currentPosition->getX()][0]->getPiece() != nullptr &&
-			board->getBoard()[currentPosition->getX()][0]->getPiece()->hasMoved() == false)
-			legalMoves->push_back(board->getBoard()[currentPosition->getX()][1]);
-
-
-	}
+	// CastleUp
+	addCastleUpIfPossible(legalMoves, board, pos);
 
 	return legalMoves;
+}
+
+void King::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor) {
+	auto pos = position.lock();
+	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
+		return;
+
+	auto squareToMove = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
+
+	if (squareToMove->getPiece() == nullptr) {
+		legalMoves->push_back(squareToMove);
+		return;
+	}
+
+	if(squareToMove->getPiece()->getOwner() != pColor)
+		legalMoves->push_back(squareToMove);
+}
+
+void King::addCastleUpIfPossible(sqr_vec* legalMoves, Board* board, std::shared_ptr<Square> pos){
+	if (firstMove) {
+		auto sqrYOff = [](int y, Board* board, std::shared_ptr<Square> pos)
+		{
+			return board->getBoard()[pos->getX()][pos->getY() + y];
+		};
+
+		// Check if all the squares until the right rook are empty and if the rook has moved
+		if (sqrYOff(1, board, pos)->getPiece() == nullptr &&
+			sqrYOff(2, board, pos)->getPiece() == nullptr &&
+			sqrYOff(3, board, pos)->getPiece() != nullptr &&
+			sqrYOff(3, board, pos)->getPiece()->hasMoved() == false)
+			legalMoves->push_back(sqrYOff(2, board, pos));
+
+		// Check if all the squares until the left rook are empty and if the rook has moved
+		if (sqrYOff(-1, board, pos)->getPiece() == nullptr &&
+			sqrYOff(-2, board, pos)->getPiece() == nullptr &&
+			sqrYOff(-3, board, pos)->getPiece() == nullptr &&
+			sqrYOff(-4, board, pos)->getPiece() != nullptr &&
+			sqrYOff(-4, board, pos)->getPiece()->hasMoved() == false)
+			legalMoves->push_back(sqrYOff(-3, board, pos));
+	}
 }

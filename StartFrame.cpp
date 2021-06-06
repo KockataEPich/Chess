@@ -77,7 +77,7 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 
 
 	if ((board->getBoard()[x][y]->getPiece() == nullptr ||
-		board->getBoard()[x][y]->getPiece()->getOwnerOfChessPiece() != player1->getColor())) {
+		board->getBoard()[x][y]->getPiece()->getOwner() != player1->getColor())) {
 
 		if (player1->getFirstClicked() == nullptr)
 			return;
@@ -208,7 +208,7 @@ void StartFrame::updateGameGUI() {
 					chessBoard[i][j]->Disable();
 			}
 
-			else if (board->getBoard()[i][j]->getPiece()->getOwnerOfChessPiece() == PlayerSide::WHITE) {
+			else if (board->getBoard()[i][j]->getPiece()->getOwner() == PlayerSide::WHITE) {
 				if (board->getBoard()[i][j]->getPiece()->getName() == "Pawn") {
 					chessBoard[i][j]->SetBitmap(m_whitePawn);
 				}
@@ -273,7 +273,7 @@ void StartFrame::updateGameGUI(std::shared_ptr<Square> oldLocation, std::shared_
 
 	auto chessPiece = square(board, newLocation)->getPiece();
 
-	if (chessPiece->getOwnerOfChessPiece() == PlayerSide::WHITE) {
+	if (chessPiece->getOwner() == PlayerSide::WHITE) {
 		if (chessPiece->getName() == "Pawn")
 			button(chessBoard, newLocation)->SetBitmap(m_whitePawn);
 

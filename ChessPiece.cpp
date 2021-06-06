@@ -22,7 +22,7 @@ void ChessPiece::setPosition(std::shared_ptr<Square> newPosition)
 	firstMove = false;
 }
 
-PlayerSide ChessPiece::getOwnerOfChessPiece()
+PlayerSide ChessPiece::getOwner()
 {
 	return owner;
 }
@@ -105,7 +105,7 @@ bool ChessPiece::endSquare(std::shared_ptr<Square> newSquare, std::vector<std::s
 {
 	if (newSquare->getPiece() != nullptr)
 	{
-		if(newSquare->getPiece()->getOwnerOfChessPiece() == currentPlayerColor)
+		if(newSquare->getPiece()->getOwner() == currentPlayerColor)
 			return true;
 
 		legalMoves->push_back(newSquare);
@@ -124,16 +124,16 @@ bool ChessPiece::hasMoved() {
 std::shared_ptr<ChessPiece> ChessPiece::clonePiece(std::shared_ptr<ChessPiece> piece, 
 												std::shared_ptr<Square> newPosition) {
 	if (piece->getName() == "Pawn")
-		return std::make_shared<Pawn>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<Pawn>(newPosition, piece->getOwner());
 	if (piece->getName() == "King")
-		return std::make_shared<King>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<King>(newPosition, piece->getOwner());
 	if (piece->getName() == "Knight")
-		return std::make_shared<Knight>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<Knight>(newPosition, piece->getOwner());
 	if (piece->getName() == "Queen")
-		return std::make_shared<Queen>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<Queen>(newPosition, piece->getOwner());
 	if (piece->getName() == "Rook")
-		return std::make_shared<Rook>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<Rook>(newPosition, piece->getOwner());
 	if (piece->getName() == "Bishop")
-		return std::make_shared<Bishop>(newPosition, piece->getOwnerOfChessPiece());
+		return std::make_shared<Bishop>(newPosition, piece->getOwner());
 
 }

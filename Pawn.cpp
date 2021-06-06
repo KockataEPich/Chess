@@ -10,52 +10,51 @@ Pawn::Pawn(std::shared_ptr<Square> position, PlayerSide playerSide)
 }
 
 // Returns the legal moves for the pawn
-std::vector<std::shared_ptr<Square>>* Pawn::getLegalMoves(Board* board, PlayerSide pColor)
+sqr_vec* Pawn::getLegalMoves(Board* board, PlayerSide pColor)
 {
-	std::vector<std::shared_ptr<Square>>* legalMoves = new std::vector<std::shared_ptr<Square>>();
+	sqr_vec* legalMoves = new sqr_vec();
 	
 	auto pos = position.lock();
 
 	// Starting at x = 6 would mean that the player is the bottom one
 	if (startingPositionX == 6) {
-		addMoveIfNecessary(-1, 0, legalMoves, board, pColor);
-		if (firstMove)
-			addMoveIfNecessary(-2, 0, legalMoves, board, pColor);
-		addMoveIfNecessary(-1, 1, legalMoves, board, pColor);
-		addMoveIfNecessary(-1, -1, legalMoves, board, pColor);
+		if (addSquareIfPossible(-1, 0, legalMoves, board, pColor) && firstMove)
+			addSquareIfPossible(-2, 0, legalMoves, board, pColor);
+		addSquareIfPossible(-1, 1, legalMoves, board, pColor);
+		addSquareIfPossible(-1, -1, legalMoves, board, pColor);
 	}
 	else{
-		addMoveIfNecessary(1, 0, legalMoves, board, pColor);
-		if(firstMove)
-			addMoveIfNecessary(2, 0, legalMoves, board, pColor);
-		addMoveIfNecessary(1, 1, legalMoves, board, pColor);
-		addMoveIfNecessary(1, -1, legalMoves, board, pColor);
+		if(addSquareIfPossible(1, 0, legalMoves, board, pColor) && firstMove)
+			addSquareIfPossible(2, 0, legalMoves, board, pColor);
+		addSquareIfPossible(1, 1, legalMoves, board, pColor);
+		addSquareIfPossible(1, -1, legalMoves, board, pColor);
 	}
 
 	return legalMoves;
 }
 
-void Pawn::addMoveIfNecessary(int xOff, int yOff, std::vector<std::shared_ptr<Square>>* legalMoves,
-	Board* board, PlayerSide pColor) {
-
+// Method checks if it is appropriate to add the move
+bool Pawn::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, 
+																			PlayerSide pColor) {
 	auto pos = position.lock();
 
 	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
-		return;
+		return false;
 
-	auto sqrOff = [](int xOff, int yOff, std::shared_ptr<Square> position, Board* board)
-	{
-		return board->getBoard()[position->getX() + xOff][position->getY() + yOff];
-	};
+	auto newSquare = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
 
-	if (yOff == 0){
-		if (sqrOff(xOff, yOff, pos, board)->getPiece() == nullptr) 
-			legalMoves->push_back(sqrOff(xOff, yOff, pos, board));
-		return;
+	// Going forward
+	if (yOff == 0){	
+		if (newSquare->getPiece() == nullptr) {
+			legalMoves->push_back(newSquare);
+			return true;
+		}
+		return false;
 	}
 
-	if (sqrOff(xOff, yOff, pos, board)->getPiece() != nullptr &&
-				sqrOff(xOff, yOff, pos, board)->getPiece()->getOwnerOfChessPiece() != pColor)
-		legalMoves->push_back(sqrOff(xOff, yOff, pos, board));
+	if (newSquare->getPiece() != nullptr && newSquare->getPiece()->getOwner() != pColor)
+		legalMoves->push_back(newSquare);
+
+	return false;
 }
 

@@ -148,7 +148,7 @@ Board::Board(std::vector<std::vector<std::shared_ptr<Square>>> givenBoard,
 					givenBoard[i][j]->getPiece(), board[i][j]);
 
 				board[i][j]->setPiece(piece);
-				if (piece->getOwnerOfChessPiece() == PlayerSide::WHITE)
+				if (piece->getOwner() == PlayerSide::WHITE)
 					this->whitePieces.push_back(piece);
 				else
 					this->blackPieces.push_back(piece);
@@ -239,7 +239,7 @@ void Board::checkPieceAndDeleteIfNecessary(std::shared_ptr<ChessPiece> newPiece,
 	if (newPiece != nullptr) {
 		if (newPiece->getName() == "King") {
 			gameIsOver = true;
-			winner = newPiece->getOwnerOfChessPiece().getOpposite().toString() + " Wins!";
+			winner = newPiece->getOwner().getOpposite().toString() + " Wins!";
 		}
 		else
 			eraseElement(newPiece, move->getSide().getOpposite());

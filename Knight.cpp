@@ -6,102 +6,36 @@ Knight::Knight(std::shared_ptr<Square> position, PlayerSide playerSide)
 	this->position = position;
 	this->owner = playerSide;
 }
-
-std::vector<std::shared_ptr<Square>>* Knight::getLegalMoves(Board* board, PlayerSide currentPlayerColor)
+sqr_vec* Knight::getLegalMoves(Board* board, PlayerSide pColor)
 {
-	std::vector<std::shared_ptr<Square>>* legalMoves = new std::vector<std::shared_ptr<Square>>();
+	sqr_vec* legalMoves = new sqr_vec();
 
-	auto sqrOff = [](int xOff, int yOff, std::weak_ptr<Square> position, Board* board)
-	{
-		return board->getBoard()[position.lock()->getX() + xOff][position.lock()->getY() + yOff];
-	};
+	auto pos = position.lock();
 
-	////////////// UP
-	if (position.lock()->getX() + 2 < 8) {
-		if (position.lock()->getY() + 1 < 8) {
-
-			if (sqrOff(2, 1, position, board)->getPiece() == nullptr || 
-				sqrOff(2, 1, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(2, 1, position, board));
-			}
-			
-		}
-			 
-		if (position.lock()->getY() - 1 >= 0) {
-
-			if (sqrOff(2, -1, position, board)->getPiece() == nullptr ||
-				sqrOff(2, -1, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(2, -1, position, board));
-			}
-
-		}
-	}
-	
-	////////////// DOWN
-
-	if (position.lock()->getX() - 2 >= 0) {
-		if (position.lock()->getY() + 1 < 8) {
-
-			if (sqrOff(-2, 1, position, board)->getPiece() == nullptr ||
-				sqrOff(-2, 1, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(-2, 1, position, board));
-			}
-
-		}
-
-		if (position.lock()->getY() - 1 >= 0) {
-
-			if (sqrOff(-2, -1, position, board)->getPiece() == nullptr ||
-				sqrOff(-2, -1, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(-2, -1, position, board));
-			}
-
-		}
-	}
-
-	////////// LEFT
-	if (position.lock()->getY() - 2 >= 0) {
-		if (position.lock()->getX() + 1 < 8) {
-
-			if (sqrOff(1, -2, position, board)->getPiece() == nullptr ||
-				sqrOff(1, -2, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(1, -2, position, board));
-			}
-
-		}
-
-		if (position.lock()->getX() - 1 >= 0) {
-
-			if (sqrOff(-1, -2, position, board)->getPiece() == nullptr ||
-				sqrOff(-1, -2, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(-1, -2, position, board));
-			}
-
-		}
-	}
-
-
-	/////////// RIGHT 
-
-	if (position.lock()->getY() + 2 < 8) {
-		if (position.lock()->getX() + 1 < 8) {
-
-			if (sqrOff(1, 2, position, board)->getPiece() == nullptr ||
-				sqrOff(1, 2, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(1, 2, position, board));
-			}
-
-		}
-
-		if (position.lock()->getX() - 1 >= 0) {
-
-			if (sqrOff(-1, 2, position, board)->getPiece() == nullptr ||
-				sqrOff(-1, 2, position, board)->getPiece()->getOwnerOfChessPiece() != currentPlayerColor) {
-				legalMoves->push_back(sqrOff(-1, 2, position, board));
-			}
-
-		}
-	}
+	addSquareIfPossible( 2,  1, legalMoves, board, pColor);
+	addSquareIfPossible( 2, -1, legalMoves, board, pColor);
+	addSquareIfPossible(-2,  1, legalMoves, board, pColor);
+	addSquareIfPossible(-2, -1, legalMoves, board, pColor);
+	addSquareIfPossible( 1,  2, legalMoves, board, pColor);
+	addSquareIfPossible( 1, -2, legalMoves, board, pColor);
+	addSquareIfPossible(-1,  2, legalMoves, board, pColor);
+	addSquareIfPossible(-1, -2, legalMoves, board, pColor);
 
 	return legalMoves;
+}
+
+void Knight::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor) {
+	auto pos = position.lock();
+	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
+		return;
+
+	auto squareToMove = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
+
+	if (squareToMove->getPiece() == nullptr) {
+		legalMoves->push_back(squareToMove);
+		return;
+	}
+
+	if (squareToMove->getPiece()->getOwner() != pColor)
+		legalMoves->push_back(squareToMove);
 }

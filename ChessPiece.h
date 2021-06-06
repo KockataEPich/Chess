@@ -9,6 +9,8 @@
 class Board;
 class Square;
 
+typedef std::vector<std::shared_ptr<Square>> sqr_vec;
+
 class ChessPiece
 {
 protected:
@@ -26,7 +28,7 @@ public:
 	bool endSquare(std::shared_ptr<Square> newSquare, std::vector<std::shared_ptr<Square>>* legalMoves, 
 		PlayerSide currentPlayerColor);
 
-	PlayerSide getOwnerOfChessPiece();
+	PlayerSide getOwner();
 
 	void addHorizontal(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
 	void addVertical(std::vector<std::shared_ptr<Square>>* legalMoves, Board* board, PlayerSide currentPlayerColor);
