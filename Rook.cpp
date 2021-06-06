@@ -1,19 +1,16 @@
 #include "Rook.h"
 
-Rook::Rook(std::shared_ptr<Square> position, PlayerSide playerSide)
-{
+Rook::Rook(shr_sqr position, PlayerSide playerSide){
 	this->name = "Rook";
 	this->position = position;
 	this->owner = playerSide;
 }
 
-std::vector<std::shared_ptr<Square>>* Rook::getLegalMoves(Board* board, PlayerSide currentPlayerColor)
-{
-	std::vector<std::shared_ptr<Square>>* legalMoves = new std::vector<std::shared_ptr<Square>>();
+sqr_vec* Rook::getLegalMoves(Board* board, PlayerSide pColor){
+	sqr_vec* legalMoves = new sqr_vec();
 
-
-	addHorizontal(legalMoves, board, currentPlayerColor);
-	addVertical(legalMoves, board, currentPlayerColor);
+	addHorizontal(legalMoves, board, pColor);
+	addVertical(legalMoves, board, pColor);
 
 	return legalMoves;
 }

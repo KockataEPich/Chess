@@ -4,7 +4,7 @@ class Bishop : public ChessPiece
 {
 public:
 	Bishop();
-	Bishop(std::shared_ptr<Square> position, PlayerSide playerSide);
-	std::vector<std::shared_ptr<Square>>* getLegalMoves(Board* board, PlayerSide currentPlayerColor);
+	Bishop(shr_sqr position, PlayerSide playerSide);
+	sqr_vec* getLegalMoves(Board* board, PlayerSide pColor);
 };
 

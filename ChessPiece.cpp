@@ -6,118 +6,73 @@
 #include "Bishop.h"
 #include "Rook.h"
 
-std::string ChessPiece::getName()
-{
-	return name;
-}
+std::string ChessPiece::getName(){ return name;				}
+shr_sqr ChessPiece::getPosition(){ return position.lock();	}
+PlayerSide ChessPiece::getOwner(){ return owner;			}
+bool ChessPiece::hasMoved()		 { return !firstMove;		}
+bool ChessPiece::inRange(int x)  { return x < 8 && x >= 0;  }
 
-shr_sqr ChessPiece::getPosition()
-{
-	return position.lock();
-}
-
-void ChessPiece::setPosition(shr_sqr newPosition)
-{
+void ChessPiece::setPosition(shr_sqr newPosition){
 	position = newPosition;
 	firstMove = false;
 }
 
-PlayerSide ChessPiece::getOwner()
-{
-	return owner;
-}
-
-
-
 void ChessPiece::addVertical(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
-	
 	auto pos = position.lock();
-	
+	// Down
 	for (int i = pos->getX() + 1; i < 8; i++)
-	{
-
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][pos->getY()];
-		if (endSquare(newSquare, legalMoves, pColor))
+		if (endSquare(i, pos->getY(), legalMoves, board, pColor))
 			break;
-	}
-
-	for (int i = pos->getX() - 1; i >= 0; i--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][pos->getY()];
-
-		if (endSquare(newSquare, legalMoves, pColor))
+	// Up
+	for (int i = pos->getX() - 1; i >= 0; i--) 
+		if (endSquare(i, pos->getY(), legalMoves, board, pColor))
 			break;
-	}
 }
-
 
 void ChessPiece::addHorizontal(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
 	auto pos = position.lock();
+	// Left
 	for (int i = pos->getY() + 1; i < 8; i++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[pos->getX()][i];
-
-		if (endSquare(newSquare, legalMoves, pColor))
+		if (endSquare(pos->getX(), i, legalMoves, board, pColor))
 			break;
-	}
-
+	// Right
 	for (int i = pos->getY() - 1; i >= 0; i--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[pos->getX()][i];
-
-		if (endSquare(newSquare, legalMoves, pColor))
+		if (endSquare(pos->getX(), i, legalMoves, board, pColor))
 			break;
-	}
 }
 void ChessPiece::addSideways(sqr_vec* legalMoves, Board* board, PlayerSide pColor){
 	auto pos = position.lock();
-	for (int i = pos->getX() + 1, j = pos->getY() - 1; i < 8 && j >= 0; i++, j--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, pColor))
-			break;
-	}
-
-	for (int i = pos->getX() - 1, j = pos->getY() + 1; i >= 0 && j < 8; i--, j++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, pColor))
-			break;
-	}
-
+	// Down Right
 	for (int i = pos->getX() + 1, j = pos->getY() + 1; i < 8 && j < 8; i++, j++)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, pColor))
+		if (endSquare(i, j, legalMoves, board, pColor))
 			break;
-	}
 
-	for (int i = pos->getX() - 1, j = pos->getY() - 1; i >= 0 && j >= 0; i--, j--)
-	{
-		std::shared_ptr<Square> newSquare = board->getBoard()[i][j];
-		if (endSquare(newSquare, legalMoves, pColor))
+	// Down Left
+	for (int i = pos->getX() + 1, j = pos->getY() - 1; i < 8 && j >= 0; i++, j--)
+			if (endSquare(i, j, legalMoves, board, pColor))
+				break;
+
+	// Up Right
+	for (int i = pos->getX() - 1, j = pos->getY() + 1; i >= 0 && j < 8; i--, j++)
+		if (endSquare(i, j, legalMoves, board, pColor))
 			break;
-	}
+
+	// Up Left
+	for (int i = pos->getX() - 1, j = pos->getY() - 1; i >= 0 && j >= 0; i--, j--)
+		if (endSquare(i, j, legalMoves, board, pColor))
+			break;
 }
 
-bool ChessPiece::endSquare(shr_sqr newSquare, sqr_vec* legalMoves, PlayerSide pColor)
-{
-	if (newSquare->getPiece() != nullptr)
-	{
+bool ChessPiece::endSquare(int x, int y, sqr_vec* legalMoves, Board* board, PlayerSide pColor){
+	shr_sqr newSquare = board->getBoard()[x][y];
+	if (newSquare->getPiece() != nullptr){
 		if(newSquare->getPiece()->getOwner() == pColor)
 			return true;
-
 		legalMoves->push_back(newSquare);
 		return true;
 	}
-
 	legalMoves->push_back(newSquare);
 	return false;
-
-}
-
-bool ChessPiece::hasMoved() {
-	return !firstMove;
 }
 
 void ChessPiece::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor) {
@@ -134,7 +89,6 @@ void ChessPiece::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Bo
 
 	if (squareToMove->getPiece()->getOwner() != pColor)
 		legalMoves->push_back(squareToMove);
-
 }
 
 shr_piece ChessPiece::clonePiece(shr_piece piece, shr_sqr newPosition) {
@@ -150,5 +104,4 @@ shr_piece ChessPiece::clonePiece(shr_piece piece, shr_sqr newPosition) {
 		return std::make_shared<Rook>(newPosition, piece->getOwner());
 	if (piece->getName() == "Bishop")
 		return std::make_shared<Bishop>(newPosition, piece->getOwner());
-
 }

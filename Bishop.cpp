@@ -1,17 +1,15 @@
 #include "Bishop.h"
 
-Bishop::Bishop(std::shared_ptr<Square> position, PlayerSide playerSide)
-{
+Bishop::Bishop(shr_sqr position, PlayerSide playerSide){
 	this->name = "Bishop";
 	this->position = position;
 	this->owner = playerSide;
 }
 
-std::vector<std::shared_ptr<Square>>* Bishop::getLegalMoves(Board* board, PlayerSide currentPlayerColor)
-{
-	std::vector<std::shared_ptr<Square>>* legalMoves = new std::vector<std::shared_ptr<Square>>();
+sqr_vec* Bishop::getLegalMoves(Board* board, PlayerSide pColor){
+	sqr_vec* legalMoves = new sqr_vec();
 
-	addSideways(legalMoves, board, currentPlayerColor);
+	addSideways(legalMoves, board, pColor);
 
 	return legalMoves;
 }

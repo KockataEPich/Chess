@@ -13,8 +13,6 @@ Pawn::Pawn(std::shared_ptr<Square> position, PlayerSide playerSide)
 sqr_vec* Pawn::getLegalMoves(Board* board, PlayerSide pColor)
 {
 	sqr_vec* legalMoves = new sqr_vec();
-	
-	auto pos = position.lock();
 
 	// Starting at x = 6 would mean that the player is the bottom one
 	if (startingPositionX == 6) {

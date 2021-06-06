@@ -1,53 +1,36 @@
 #include "King.h"
 // Constructor
-King::King(std::shared_ptr<Square> position, PlayerSide playerSide){
+King::King(shr_sqr position, PlayerSide playerSide){
 	this->name = "King";
 	this->position = position;
 	this->owner = playerSide;
 }
 
-sqr_vec* King::getLegalMoves(Board* board, PlayerSide currentPlayerColor){
-	sqr_vec* legalMoves = new std::vector<std::shared_ptr<Square>>();
-
-	auto pos = position.lock();
+sqr_vec* King::getLegalMoves(Board* board, PlayerSide pColor){
+	sqr_vec* legalMoves = new sqr_vec();
 
 	// Add the move on right,left,up and down positions
-	addSquareIfPossible( 0,  1, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible( 0, -1, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible( 1,  0, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible(-1,  0, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible( 0,  1, legalMoves, board, pColor);
+	addSquareIfPossible( 0, -1, legalMoves, board, pColor);
+	addSquareIfPossible( 1,  0, legalMoves, board, pColor);
+	addSquareIfPossible(-1,  0, legalMoves, board, pColor);
 	
 	// Add square of bottom right, top right, bottom left and top left
-	addSquareIfPossible( 1,  1, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible(-1,  1, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible( 1, -1, legalMoves, board, currentPlayerColor);
-	addSquareIfPossible(-1, -1, legalMoves, board, currentPlayerColor);
+	addSquareIfPossible( 1,  1, legalMoves, board, pColor);
+	addSquareIfPossible(-1,  1, legalMoves, board, pColor);
+	addSquareIfPossible( 1, -1, legalMoves, board, pColor);
+	addSquareIfPossible(-1, -1, legalMoves, board, pColor);
 
 	// CastleUp
-	addCastleUpIfPossible(legalMoves, board, pos);
+	addCastleUpIfPossible(legalMoves, board);
 
 	return legalMoves;
 }
 
-void King::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* board, PlayerSide pColor) {
+void King::addCastleUpIfPossible(sqr_vec* legalMoves, Board* board){
 	auto pos = position.lock();
-	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
-		return;
-
-	auto squareToMove = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
-
-	if (squareToMove->getPiece() == nullptr) {
-		legalMoves->push_back(squareToMove);
-		return;
-	}
-
-	if(squareToMove->getPiece()->getOwner() != pColor)
-		legalMoves->push_back(squareToMove);
-}
-
-void King::addCastleUpIfPossible(sqr_vec* legalMoves, Board* board, std::shared_ptr<Square> pos){
 	if (firstMove) {
-		auto sqrYOff = [](int y, Board* board, std::shared_ptr<Square> pos)
+		auto sqrYOff = [](int y, Board* board, shr_sqr pos)
 		{
 			return board->getBoard()[pos->getX()][pos->getY() + y];
 		};
