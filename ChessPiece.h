@@ -38,5 +38,11 @@ public:
 
 	std::shared_ptr<ChessPiece> clonePiece(std::shared_ptr<ChessPiece> piece,
 													std::shared_ptr<Square> newPosition);
+
+
+	bool inRange(int x)
+	{
+		return x < 8 && x >= 0;
+	}
 };
 

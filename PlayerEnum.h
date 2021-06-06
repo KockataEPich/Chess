@@ -19,8 +19,8 @@ public:
 	bool operator ==(PlayerSide side) { return color == side.color; }
 	bool operator !=(PlayerSide side) { return color != side.color; }
 
-	PlayerSide getOpposite()  { return (color = PlayerSide::WHITE) ? PlayerSide::WHITE : PlayerSide::BLACK;}
-	std::string toString()    { return (color = PlayerSide::WHITE) ? "White" : "Black"; }
+	PlayerSide getOpposite()  { return (color == PlayerSide::WHITE) ? PlayerSide::BLACK : PlayerSide::WHITE;}
+	std::string toString()    { return (color == PlayerSide::WHITE) ? "White" : "Black"; }
 
 };
 
