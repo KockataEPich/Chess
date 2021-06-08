@@ -1,5 +1,4 @@
 #include "Bishop.h"
-
 Bishop::Bishop(shr_sqr position, PlayerSide playerSide){
 	this->name = "Bishop";
 	this->position = position;

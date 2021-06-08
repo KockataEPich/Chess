@@ -32,7 +32,7 @@ void King::addCastleUpIfPossible(sqr_vec* legalMoves, Board* board){
 	if (firstMove) {
 		auto sqrYOff = [](int y, Board* board, shr_sqr pos)
 		{
-			return board->getBoard()[pos->getX()][pos->getY() + y];
+			return (*board)(pos->getX(), pos->getY() + y);
 		};
 
 		// Check if all the squares until the right rook are empty and if the rook has moved

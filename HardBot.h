@@ -13,7 +13,8 @@ private:
 public:
 	HardBot(PlayerSide color);
 	Move* getMove(Board* board);
-	int MinMaxAlphaBeta(Board* board, PlayerSide currentSide, int currentDepth);
+	int MinMaxAlphaBeta(Board* board, PlayerSide currentSide, int currentDepth, 
+		int alpha, int beta);
 };
 
 

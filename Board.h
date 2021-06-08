@@ -9,30 +9,33 @@
 class Square;
 class Move;
 
-typedef std::vector<std::vector<std::shared_ptr<Square>>> board_vec;
+typedef std::shared_ptr<Square> shr_sqr;
+typedef std::vector<shr_sqr> sqr_vec;
+typedef std::vector<sqr_vec*> board_vec;
+
 typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
 typedef std::shared_ptr<ChessPiece> shr_piece;
-typedef std::shared_ptr<Square> shr_sqr;
-typedef std::vector <std::shared_ptr<Square>> sqr_vec;
+
 
 class Board
 {
 private:
-	board_vec board;
-	piece_vec whitePieces;
-	piece_vec blackPieces;
+	board_vec* board;
+	piece_vec* whitePieces;
+	piece_vec* blackPieces;
 	bool gameIsOver = false;
 	std::string winner;
 
 public:
 	Board();
-	Board(board_vec board);
+	Board(board_vec* board);
 	~Board();
 
-	board_vec  getBoard();
+	board_vec*  getBoard();
 	std::string getWinner();
 	bool isOver();
-	piece_vec getPieceList(PlayerSide side);
+	piece_vec* getPieceList(PlayerSide side);
+	shr_sqr operator()(int x, int y);
 	
 	void makeMove(Move* move);
 

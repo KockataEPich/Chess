@@ -1,11 +1,12 @@
 #include "Pawn.h"
 
 // Constructor
-Pawn::Pawn(std::shared_ptr<Square> position, PlayerSide playerSide)
+Pawn::Pawn(std::shared_ptr<Square> position, PlayerSide pColor)
 {
 	this->name = "Pawn";
 	this->position = position;
-	this->owner = playerSide;
+
+	this->owner = pColor;
 	this->startingPositionX = position->getX();
 }
 
@@ -39,7 +40,7 @@ bool Pawn::addSquareIfPossible(int xOff, int yOff, sqr_vec* legalMoves, Board* b
 	if (!inRange(pos->getX() + xOff) || !inRange(pos->getY() + yOff))
 		return false;
 
-	auto newSquare = board->getBoard()[pos->getX() + xOff][pos->getY() + yOff];
+	auto newSquare = (*board)(pos->getX() + xOff, pos->getY() + yOff);
 
 	// Going forward
 	if (yOff == 0){	

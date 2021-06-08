@@ -6,6 +6,6 @@
 class Evaluator
 {
 public:
-	virtual int evaluateBoard(Board* board, PlayerSide side) = 0;
+	virtual int evaluateBoard(Board* board, PlayerSide pColor) = 0;
 };
 

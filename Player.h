@@ -10,6 +10,8 @@ class Board;
 typedef std::vector<std::shared_ptr<Square>> sqr_vec;
 typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
 typedef std::shared_ptr<Square> shr_sqr;
+
+
 class Player
 {
 protected:
@@ -19,7 +21,6 @@ protected:
 	// Strategy strategy
 
 public:
-	piece_vec getPieces(Board* board);
 	PlayerSide getColor();
 	virtual Move* getMove(Board* board) = 0;
 

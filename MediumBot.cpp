@@ -7,26 +7,26 @@ MediumBot::MediumBot(PlayerSide color){ this->color = color; }
 
 Move* MediumBot::getMove(Board* board) {
 	//The input would be a on click input
-	std::vector<std::shared_ptr<ChessPiece>> myPieces = board->getPieceList(color);
+	piece_vec* myPieces = board->getPieceList(color);
 
 	int bestBoardValue = INT_MIN;
 	//Move* bestMove = nullptr;
-	std::shared_ptr<Square> bestInitMove = nullptr;
-	std::shared_ptr<Square> bestSecondMove = nullptr;
+	shr_sqr bestInitMove = nullptr;
+	shr_sqr bestSecondMove = nullptr;
 
 
-	for (int i = 0; i < myPieces.size(); i++)
+	for (int i = 0; i < myPieces->size(); i++)
 	{
-		std::vector<std::shared_ptr<Square>>* legalMoves = myPieces[i]->getLegalMoves(board, color);
+		sqr_vec* legalMoves = myPieces->at(i)->getLegalMoves(board, color);
 		for(int j = 0; j < legalMoves->size(); j++) {
 
 			Board* newBoard = new Board(board->getBoard());
 
 			Move* move = new Move(
-				newBoard->getBoard()[myPieces[i]->getPosition()->getX()]
-				[myPieces[i]->getPosition()->getY()],
-				newBoard->getBoard()[legalMoves->at(j)->getX()]
-				[legalMoves->at(j)->getY()], color);
+				(*newBoard)(myPieces->at(i)->getPosition()->getX(),
+					myPieces->at(i)->getPosition()->getY()),
+				(*newBoard)(legalMoves->at(j)->getX(),
+					legalMoves->at(j)->getY()), color);
 
 			newBoard->makeMove(move);
 
@@ -35,12 +35,13 @@ Move* MediumBot::getMove(Board* board) {
 			if (currentBoardValue > bestBoardValue)
 			{
 				bestBoardValue = currentBoardValue;
-				bestInitMove = myPieces[i]->getPosition();
+				bestInitMove = myPieces->at(i)->getPosition();
 				bestSecondMove = legalMoves->at(j);
 			}
 			delete(newBoard);
 			delete(move);
 		}
+		delete(legalMoves);
 	}
 	return new Move(bestInitMove, bestSecondMove, color);
 	//return new Move(board->getBoard()[1][0], board->getBoard()[2][0], color);
