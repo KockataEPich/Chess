@@ -177,17 +177,15 @@ Board::~Board() {
 
 	blackPieces->clear();
 
+	delete(board);
 	delete(whitePieces);
 	delete(blackPieces);
 }
 
-board_vec* Board::getBoard()	{ return board;			}
-std::string Board::getWinner()	{ return winner;		}
-bool Board::isOver()			{ return gameIsOver;	} 
-
-shr_sqr Board::operator()(int x, int y) {
-	return board->at(x)->at(y);
-}
+board_vec* Board::getBoard()			{ return board;					}
+std::string Board::getWinner()			{ return winner;				}
+bool Board::isOver()					{ return gameIsOver;			} 
+shr_sqr Board::operator()(int x, int y) { return board->at(x)->at(y);	}
 
 piece_vec* Board::getPieceList(PlayerSide side){ 
 	return (side == PlayerSide::WHITE) ? whitePieces : blackPieces;
@@ -226,7 +224,7 @@ void Board::eraseElement(shr_piece pieceToDelete, PlayerSide color) {
 	return;
 }
 
-void Board::checkPieceAndDeleteIfNecessary(std::shared_ptr<ChessPiece> newPiece, Move* move) {
+void Board::checkPieceAndDeleteIfNecessary(shr_piece newPiece, Move* move) {
 	if (newPiece != nullptr) {
 		if (newPiece->getName() == "King") {
 			gameIsOver = true;
@@ -246,13 +244,18 @@ void Board::checkForCastleUp(Move* move, shr_sqr newSquare) {
 	};
 
 	if (piece->hasMoved() == false && piece->getName() == "King"){
-		if (move->getOldLocation()->getY() - newSquare->getY() == -2)
-			this->makeMove(new Move(sqrYOff(7, move, board), 
-										sqrYOff(5, move, board), move->getSide()));
-
-		if (move->getOldLocation()->getY() - newSquare->getY() == 3)
-			this->makeMove(new Move(sqrYOff(0, move, board), 
-										sqrYOff(2, move, board), move->getSide()));
+		if (move->getOldLocation()->getY() - newSquare->getY() == -2) {
+			Move* rookMove = new Move(sqrYOff(7, move, board),
+				sqrYOff(5, move, board), move->getSide());
+			this->makeMove(rookMove);
+			delete rookMove;
+		}
+		if (move->getOldLocation()->getY() - newSquare->getY() == 3) {
+			Move* rookMove = new Move(sqrYOff(0, move, board),
+				sqrYOff(2, move, board), move->getSide());
+			this->makeMove(rookMove);
+			delete rookMove;
+		}
 	}
 }
 

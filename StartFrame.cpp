@@ -57,10 +57,10 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 
 	board = new Board();
 
-	player1 = new HumanPlayer(PlayerSide::WHITE);
-	player2 = new HardBot(PlayerSide::BLACK);
+	player1 = new HardBot(PlayerSide::WHITE, 3);
+	player2 = new HardBot(PlayerSide::BLACK, 2);
 
-	isHumanPlayer = 1;
+	isHumanPlayer = 0;
 
 	updateGameGUI();
 
@@ -178,16 +178,11 @@ void StartFrame::gameOver()
 
 StartFrame::~StartFrame()
 {
-	//for (auto& i : chessBoard)
-	//	i.clear();
-
 	delete(board);
 
 	delete(player1);
 	delete(player2);
 
-
-	chessBoard.clear();
 }
 
 
@@ -339,9 +334,9 @@ void StartFrame::changeButtonLegalMoves(int x, int y, bool remove) {
 
 	for (int i = 0; i < 8; i++)
 		for (int j = 0; j < 8; j++)
-		{
 			chessBoard[i][j]->SetBackgroundColour(wxNullColour);
-		}
+
+	this->Update();
 }
 
 

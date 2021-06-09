@@ -6,12 +6,13 @@
 
 class HardBot : public Player{
 private:
-	Evaluator* evaluator = new MediumBotEvaluator();
+	Evaluator* evaluator; 
 	int depth;
 	Move* currentBestMove;
 
 public:
-	HardBot(PlayerSide color);
+	HardBot(PlayerSide color, int depth);
+	~HardBot();
 	Move* getMove(Board* board);
 	int MinMaxAlphaBeta(Board* board, PlayerSide currentSide, int currentDepth, 
 		int alpha, int beta);

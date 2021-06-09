@@ -10,25 +10,24 @@ class Board;
 typedef std::vector<std::shared_ptr<Square>> sqr_vec;
 typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
 typedef std::shared_ptr<Square> shr_sqr;
+typedef std::weak_ptr<Square> wk_sqr;
 
-
-class Player
-{
+class Player{
 protected:
 	PlayerSide color;
-	std::weak_ptr<Square> firstClickedSquare;
-	std::weak_ptr<Square> secondClickedSquare;
+	wk_sqr firstClickedSquare;
+	wk_sqr secondClickedSquare;
 	// Strategy strategy
-
 public:
 	PlayerSide getColor();
-	virtual Move* getMove(Board* board) = 0;
+	void clearPoints();
 
 	shr_sqr getFirstClicked();
 	void setFirstClicked(shr_sqr square);
-
 	shr_sqr getSecondClickedSquare();
 	void setSecondClickedSquare(shr_sqr sqaure);
+	
 
-	void clearPoints();
+	virtual Move* getMove(Board* board) = 0;
+	virtual ~Player() {};
 };

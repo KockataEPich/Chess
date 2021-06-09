@@ -21,6 +21,7 @@ Move* EasyBot::getMove(Board* board){
 			delete(legalMoves);
 			return randomMove;
 		}
+		delete(legalMoves);
 	}
 
 	return new Move((*board)(1, 0), (*board)(2, 0), color);

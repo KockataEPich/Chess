@@ -1,28 +1,12 @@
 #include "Player.h"
 
-PlayerSide Player::getColor() {
-	return color;
-}
+PlayerSide Player::getColor()						{ return color;							}
+shr_sqr Player::getFirstClicked()					{ return firstClickedSquare.lock();		}
+void Player::setFirstClicked(shr_sqr square)		{ firstClickedSquare = square;			}
+shr_sqr Player::getSecondClickedSquare()			{ return secondClickedSquare.lock();	}
+void Player::setSecondClickedSquare(shr_sqr square) { secondClickedSquare = square;			}
 
-std::shared_ptr<Square> Player::getFirstClicked() {
-	return firstClickedSquare.lock();
-}
-void Player::setFirstClicked(std::shared_ptr<Square> square)
-{
-	firstClickedSquare = square;
-}
-
-std::shared_ptr<Square> Player::getSecondClickedSquare() {
-	return secondClickedSquare.lock();
-}
-
-void Player::setSecondClickedSquare(std::shared_ptr<Square> square) {
-	secondClickedSquare = square;
-}
-
-void Player::clearPoints()
-{
-	firstClickedSquare = std::weak_ptr<Square>();
-	secondClickedSquare = std::weak_ptr<Square>();
-
+void Player::clearPoints(){
+	firstClickedSquare = wk_sqr();
+	secondClickedSquare = wk_sqr();
 }

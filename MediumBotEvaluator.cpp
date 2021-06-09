@@ -1,25 +1,34 @@
 #include "MediumBotEvaluator.h"
 
-int MediumBotEvaluator::evaluateBoard(Board* board, PlayerSide pColor)
-{
+int MediumBotEvaluator::evaluateBoard(Board* board, PlayerSide pColor){
 	int ourPiecesSum = 0;
 	int enemyPiecesSum = 0;
-	
 	
 	std::vector<std::shared_ptr<ChessPiece>>* pieces = board->getPieceList(pColor);
 
 	for (int i = 0; i < pieces->size(); i++) {
 		std::string name = pieces->at(i)->getName();
-		if (name == "Pawn")
+		if (name == "Pawn") {
 			ourPiecesSum += pawnPieceValue;
-		if (name == "Rook")
+			continue;
+		}
+		if (name == "Rook"){
 			ourPiecesSum += rookPieceValue;
-		if (name == "Knight")
+			continue;
+		}
+
+		if (name == "Knight"){
 			ourPiecesSum += knightPieceValue;
-		if (name == "Bishop")
+			continue;
+		}
+		if (name == "Bishop"){
 			ourPiecesSum += bishopPieceValue;
-		if (name == "Queen")
+			continue;
+		}
+		if (name == "Queen"){
 			ourPiecesSum += queenPieceValue;
+			continue;
+		}
 		if (name == "King")
 			ourPiecesSum += kingPieceValue;
 	}
@@ -28,16 +37,26 @@ int MediumBotEvaluator::evaluateBoard(Board* board, PlayerSide pColor)
 
 	for (int i = 0; i < pieces->size(); i++) {
 		std::string name = pieces->at(i)->getName();
-		if (name == "Pawn")
+		if (name == "Pawn"){
 			enemyPiecesSum += pawnPieceValue;
-		if (name == "Rook")
+			continue;
+		}
+		if (name == "Rook"){
 			enemyPiecesSum += rookPieceValue;
-		if (name == "Knight")
+			continue;
+		}
+		if (name == "Knight"){
 			enemyPiecesSum += knightPieceValue;
-		if (name == "Bishop")
+			continue;
+		}
+		if (name == "Bishop"){
 			enemyPiecesSum += bishopPieceValue;
-		if (name == "Queen")
+			continue;
+		}
+		if (name == "Queen"){
 			enemyPiecesSum += queenPieceValue;
+			continue;
+		}
 		if (name == "King")
 			enemyPiecesSum += kingPieceValue;
 	}
