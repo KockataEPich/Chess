@@ -93,6 +93,9 @@
     <ClCompile Include="HardBot.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HardEvaluator.cpp">
+      <Filter>Source Files\Evaluator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StartFrame.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="HardBot.h">
       <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HardEvaluator.h">
+      <Filter>Header Files\Evaluator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

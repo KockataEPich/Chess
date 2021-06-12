@@ -5,6 +5,8 @@
 #include "Queen.h"
 #include "MediumBot.h"
 #include "HardBot.h"
+#include "HardEvaluator.h"
+#include "MediumBotEvaluator.h"
 
 
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
@@ -57,13 +59,16 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 
 	board = new Board();
 
-	player1 = new HardBot(PlayerSide::WHITE, 3);
-	player2 = new HardBot(PlayerSide::BLACK, 2);
+	Evaluator* evaluator1 = new MediumBotEvaluator();
+	Evaluator* evaluator2 = new HardEvaluator();
+
+	player1 = new HardBot(PlayerSide::WHITE, 3, evaluator1);
+	//player1 = new HumanPlayer(PlayerSide::WHITE);
+	player2 = new HardBot(PlayerSide::BLACK, 3, evaluator2);
 
 	isHumanPlayer = 0;
 
 	updateGameGUI();
-
 
 	//startGame();
 };

@@ -1,9 +1,10 @@
 #include "HardBot.h"
+#include "HardEvaluator.h"
 
-HardBot::HardBot(PlayerSide color, int depth) { 
+HardBot::HardBot(PlayerSide color, int depth, Evaluator* evaluator) { 
 	this->color = color; 
 	this->depth = depth;
-	evaluator = new MediumBotEvaluator();
+	evaluator = new HardEvaluator();
 }
 
 HardBot::~HardBot() {

@@ -11,7 +11,7 @@ private:
 	Move* currentBestMove;
 
 public:
-	HardBot(PlayerSide color, int depth);
+	HardBot(PlayerSide color, int depth, Evaluator* evaluator);
 	~HardBot();
 	Move* getMove(Board* board);
 	int MinMaxAlphaBeta(Board* board, PlayerSide currentSide, int currentDepth, 
