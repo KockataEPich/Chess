@@ -17,8 +17,7 @@ typedef std::vector<std::shared_ptr<ChessPiece>> piece_vec;
 typedef std::shared_ptr<ChessPiece> shr_piece;
 
 
-class Board
-{
+class Board{
 private:
 	board_vec* board;
 	piece_vec* whitePieces;
@@ -39,7 +38,7 @@ public:
 	
 	void makeMove(Move* move);
 
-	void eraseElement(shr_piece pieceToDelete, PlayerSide color);
+	void removePiece(shr_piece pieceToDelete);
 	void checkPieceAndDeleteIfNecessary(shr_piece newPiece, Move* move);
 	void checkForCastleUp(Move* move, shr_sqr newSquare);
 	void handlePiecePromotion(shr_sqr newSquare, Move* move);

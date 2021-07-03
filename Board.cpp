@@ -208,8 +208,8 @@ void Board::makeMove(Move* move){
 	handlePiecePromotion(newSquare(move, this), move);
 }
 
-void Board::eraseElement(shr_piece pieceToDelete, PlayerSide color) {
-	if (color == PlayerSide::WHITE)
+void Board::removePiece(shr_piece pieceToDelete) {
+	if (pieceToDelete->getOwner() == PlayerSide::WHITE)
 		for (int i = 0; i < whitePieces->size(); i++)
 			if (pieceToDelete == whitePieces->at(i)) {
 				whitePieces->erase(whitePieces->begin() + i);
@@ -231,7 +231,7 @@ void Board::checkPieceAndDeleteIfNecessary(shr_piece newPiece, Move* move) {
 			winner = newPiece->getOwner().getOpposite().toString() + " Wins!";
 		}
 		else
-			eraseElement(newPiece, move->getSide().getOpposite());
+			removePiece(newPiece);
 	}
 }
 
@@ -250,7 +250,7 @@ void Board::checkForCastleUp(Move* move, shr_sqr newSquare) {
 			this->makeMove(rookMove);
 			delete rookMove;
 		}
-		if (move->getOldLocation()->getY() - newSquare->getY() == 3) {
+		else if (move->getOldLocation()->getY() - newSquare->getY() == 3) {
 			Move* rookMove = new Move(sqrYOff(0, move, board),
 				sqrYOff(2, move, board), move->getSide());
 			this->makeMove(rookMove);
@@ -272,6 +272,8 @@ void Board::handlePiecePromotion(shr_sqr newSquare, Move* move) {
 			whitePieces->push_back(promotedPiece);
 		else
 			blackPieces->push_back(promotedPiece);
+
+		removePiece(movedPiece);
 	}
 }
 

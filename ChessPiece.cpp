@@ -50,8 +50,8 @@ void ChessPiece::addSideways(sqr_vec* legalMoves, Board* board, PlayerSide pColo
 
 	// Down Left
 	for (int i = pos->getX() + 1, j = pos->getY() - 1; i < 8 && j >= 0; i++, j--)
-			if (endSquare(i, j, legalMoves, board, pColor))
-				break;
+		if (endSquare(i, j, legalMoves, board, pColor))
+			break;
 
 	// Up Right
 	for (int i = pos->getX() - 1, j = pos->getY() + 1; i >= 0 && j < 8; i--, j++)

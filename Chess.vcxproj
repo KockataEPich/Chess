@@ -38,6 +38,7 @@
     <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="StartFrame.cpp" />
+    <ClCompile Include="VeryHardBot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -62,6 +63,7 @@
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="StartFrame.h" />
+    <ClInclude Include="VeryHardBot.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="640px-Chess_Pieces_Sprite.svg.png" />

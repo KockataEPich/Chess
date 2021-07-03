@@ -7,6 +7,7 @@
 #include "HardBot.h"
 #include "HardEvaluator.h"
 #include "MediumBotEvaluator.h"
+#include "VeryHardBot.h"
 
 
 StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))

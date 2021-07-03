@@ -4,7 +4,7 @@
 HardBot::HardBot(PlayerSide color, int depth, Evaluator* evaluator) { 
 	this->color = color; 
 	this->depth = depth;
-	evaluator = new HardEvaluator();
+	this->evaluator = evaluator;
 }
 
 HardBot::~HardBot() {
@@ -70,21 +70,20 @@ int HardBot::MinMaxAlphaBeta(Board* board, PlayerSide pColor, int currentDepth, 
 			if (pColor != color && bestBoardValue < beta)
 				beta = bestBoardValue;
 
-			// Stop the search if it is pointless
-			if (alpha > beta) {
-				delete(newBoard);
-				delete(move);
-				break;
-			}
+			
 			delete(newBoard);
 			delete(move);
+
+			// Stop the search if it is pointless
+			if (alpha > beta) 
+				break;
 		}
-		if (alpha > beta) {
-			delete(legalMoves);
-			break;
-		}
+
 		delete(legalMoves);
+		if (alpha > beta)
+			break;
 	}
+	
 	if (currentDepth == 0)
 		currentBestMove = new Move(bestInitMove, bestSecondMove, pColor);
 
