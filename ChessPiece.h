@@ -4,11 +4,14 @@
 #include "Square.h"
 #include "Board.h"
 #include <memory>
+#include "Move.h"
 #include "PlayerEnum.h"
 
+class Move;
 class Board;
 class Square;
 
+typedef std::vector<Move> move_vec;
 typedef std::vector<std::shared_ptr<Square>>	sqr_vec;
 typedef std::shared_ptr<Square>					shr_sqr;
 typedef std::weak_ptr<Square>					wk_sqr;
@@ -36,7 +39,8 @@ public:
 	void setPosition(shr_sqr newPosition);
 
 	std::shared_ptr<ChessPiece> clonePiece(std::shared_ptr<ChessPiece>& piece, shr_sqr& newPosition);
+	move_vec makeMovesOutOfEndPosition(sqr_vec& move_squares);
 
-	virtual sqr_vec getLegalMoves(Board& board, PlayerSide pColor) = 0;
+	virtual move_vec getLegalMoves(Board& board, PlayerSide pColor) = 0;
 };
 typedef std::shared_ptr<ChessPiece> shr_piece;

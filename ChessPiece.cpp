@@ -126,3 +126,13 @@ shr_piece ChessPiece::clonePiece(std::shared_ptr<ChessPiece>& piece, shr_sqr& ne
 		return cr_piece;
 	}
 }
+
+move_vec ChessPiece::makeMovesOutOfEndPosition(sqr_vec& move_squares) {
+	move_vec moves;
+	for (auto& square : move_squares) {
+		moves.push_back(Move(
+			this->getPosition(), square, owner));
+	}
+
+	return moves;
+}

@@ -9,13 +9,9 @@
 #include "MediumBotEvaluator.h"
 #include "VeryHardBot.h"
 
-
-StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800))
-{
+StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), wxSize(1200, 800)){
 	grid = new wxGridSizer(8, 8, 0, 0);
-
 	wxImage image;
-
 	wxPNGHandler* handler = new wxPNGHandler();
 
 	image.AddHandler(handler);
@@ -51,39 +47,27 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 	this->SetSizer(grid);
 	grid->Layout();
 
-
-
-	//	startButton = new wxBitmapButton(this, 10001, m_blackKing, wxPoint(10, 10), wxSize(50, 50));
-
 	Evaluator* evaluator1 = new MediumBotEvaluator();
 	//Evaluator* evaluator2 = new HardEvaluator();
 
 	//player1 = new EasyBot(PlayerSide::WHITE);
 	player1 = new HumanPlayer(PlayerSide::WHITE);
-	player2 = new HardBot(PlayerSide::BLACK, 1, evaluator1, board);
-
+	player2 = new HardBot(PlayerSide::BLACK, 2, evaluator1, board);
 	isHumanPlayer = 1;
-
 	updateGameGUI();
-	//startGame();
 };
 
-void StartFrame::onButtonClicked(wxCommandEvent& evt)
-{
+void StartFrame::onButtonClicked(wxCommandEvent& evt){
 	if (isHumanPlayer == 0)
 		playChessGame();
 	
 	int x = (evt.GetId() - 10000) % 8;
 	int y = (evt.GetId() - 10000) / 8;
 
-
 	if (board(x, y)->getPiece() == nullptr ||
-		(board(x, y)->getPiece()->getOwner() != player1->getColor())) {
-
+		(board(x, y)->getPiece()->getOwner() != player1->getColor())) 
 		if (player1->getFirstClicked() == nullptr)
 			return;
-	}
-
 
 	if (player1->getFirstClicked() == nullptr) {
 		player1->setFirstClicked(board(x, y));
@@ -91,13 +75,13 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 		return;
 	}
 
-	std::vector<std::shared_ptr<Square>> legalMoves = player1->getFirstClicked()->
+	move_vec legalMoves = player1->getFirstClicked()->
 		getPiece()->getLegalMoves(board, player1->getColor());
 
 	bool isMoveLegal = false;
 
 	for (int i = 0; i < legalMoves.size(); i++)
-		if (board(x, y) == legalMoves[i])
+		if (board(x, y) == legalMoves[i].getNewLocation())
 			isMoveLegal = true;
 
 	if (isMoveLegal){
@@ -107,9 +91,7 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 		board.makeMove(newMove);
 		updateGameGUI();
 		//updateGameGUI(newMove.getOldLocation(), newMove.getNewLocation());
-
 		changeButtonLegalMoves(x, y, true);
-
 		player1->clearPoints();
 
 		if (board.isOver())
@@ -124,26 +106,18 @@ void StartFrame::onButtonClicked(wxCommandEvent& evt)
 		if (board.isOver())
 			gameOver();
 	}
-
 	player1->clearPoints();
 	changeButtonLegalMoves(x, y, true);
-
 }
 
-void StartFrame::startGame()
-{
-	playChessGame();
-}
-
+void StartFrame::startGame(){ playChessGame(); }
 //Player1 and PLayer2 as parameters
-void StartFrame::playChessGame()
-{
+void StartFrame::playChessGame(){
 	for (int x = 0; x < 8; x++)
 		for (int y = 0; y < 8; y++) {
 			chessBoard[x][y]->Disable();
 		}
 	while (!board.isOver()) {
-
 		auto newMove = player1->getMove(board);
 		board.makeMove(newMove);
 		updateGameGUI(newMove.getOldLocation(), newMove.getNewLocation());
@@ -155,23 +129,18 @@ void StartFrame::playChessGame()
 
 		newMove = player2->getMove(board);
 		board.makeMove(newMove);
-		
+
 		updateGameGUI(newMove.getOldLocation(), newMove.getNewLocation());
 		wxMilliSleep(2000);
 	}
-
 	gameOver();
-
 }
 
-void StartFrame::gameOver()
-{
-	this->SetLabel(board.getWinner());
-}
-
+void StartFrame::gameOver(){ this->SetLabel(board.getWinner()); }
 StartFrame::~StartFrame(){
+	delete(player1);
+	delete(player2);
 }
-
 
 void StartFrame::updateGameGUI() {
 	for (int i = 0; i < 8; i++)
@@ -221,13 +190,10 @@ void StartFrame::updateGameGUI() {
 			}
 
 		}
-
 	this->Update();
 }
 
-
 void StartFrame::updateGameGUI(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation) {
-
 	auto button = [](std::vector<std::vector<wxBitmapButton*>> chessBoard, std::shared_ptr<Square> location) {
 		return chessBoard[location->getX()][location->getY()];
 	};
@@ -238,7 +204,6 @@ void StartFrame::updateGameGUI(std::shared_ptr<Square> oldLocation, std::shared_
 
 	if (isHumanPlayer == 0)
 		button(chessBoard, oldLocation)->Disable();
-
 
 	button(chessBoard, newLocation)->Disable();
 	button(chessBoard, newLocation)->SetBitmap(wxBitmap());
@@ -299,10 +264,10 @@ void StartFrame::updateGameGUI(std::shared_ptr<Square> oldLocation, std::shared_
 
 void StartFrame::changeButtonLegalMoves(int x, int y, bool remove) {
 	if (!remove) {
-		std::vector<std::shared_ptr<Square>> legalMoves = board(x, y)->
+		move_vec legalMoves = board(x, y)->
 			getPiece()->getLegalMoves(board, player1->getColor());
 		for (int i = 0; i < legalMoves.size(); i++) {
-			chessBoard[legalMoves[i]->getX()][legalMoves[i]->getY()]->SetBackgroundColour(wxColour(0, 120, 10));
+			chessBoard[legalMoves[i].getNewLocation()->getX()][legalMoves[i].getNewLocation()->getY()]->SetBackgroundColour(wxColour(0, 120, 10));
 		}
 		return;
 	}

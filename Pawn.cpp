@@ -10,7 +10,7 @@ Pawn::Pawn(std::shared_ptr<Square> position, PlayerSide pColor){
 }
 
 // Returns the legal moves for the pawn
-sqr_vec Pawn::getLegalMoves(Board& board, PlayerSide pColor)
+move_vec Pawn::getLegalMoves(Board& board, PlayerSide pColor)
 {
 	sqr_vec legalMoves;
 
@@ -28,7 +28,7 @@ sqr_vec Pawn::getLegalMoves(Board& board, PlayerSide pColor)
 		addSquareIfPossible(1, -1, legalMoves, board, pColor);
 	}
 
-	return legalMoves;
+	return makeMovesOutOfEndPosition(legalMoves);
 }
 
 // Method checks if it is appropriate to add the move

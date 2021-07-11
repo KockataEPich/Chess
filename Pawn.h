@@ -6,7 +6,7 @@ private:
 public:
 	Pawn() {};
 	Pawn(std::shared_ptr<Square> position, PlayerSide playerSide);
-	sqr_vec getLegalMoves(Board& board, PlayerSide pColor);
+	move_vec getLegalMoves(Board& board, PlayerSide pColor);
 	bool addSquareIfPossible(int xOff, int yOff, sqr_vec& legalMoves, Board& board, PlayerSide pColor);
 };
 

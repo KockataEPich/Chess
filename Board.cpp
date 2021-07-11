@@ -148,7 +148,7 @@ piece_vec Board::getPieceList(PlayerSide side){
 	return (side == PlayerSide::WHITE) ? whitePieces : blackPieces;
 }
 
-void Board::makeMove(Move move){
+void Board::makeMove(Move& move){
 	auto newSquare = [](Move& move, Board* board){
 		return board->getBoard()[move.getNewLocation()->getX()][move.getNewLocation()->getY()];
 	};
@@ -165,7 +165,7 @@ void Board::makeMove(Move move){
 	handlePiecePromotion(board[move.getNewLocation()->getX()][move.getNewLocation()->getY()], move);
 }
 
-void Board::removePiece(shr_piece pieceToDelete) {
+void Board::removePiece(shr_piece& pieceToDelete) {
 	if (pieceToDelete->getOwner() == PlayerSide::WHITE)
 		for (int i = 0; i < whitePieces.size(); i++)
 			if (pieceToDelete == whitePieces.at(i)) {
@@ -186,6 +186,8 @@ void Board::checkPieceAndDeleteIfNecessary(shr_piece& newPiece, Move& move) {
 		return;
 	
 	if (newPiece->getName() == "King") {
+		move.set_captured_piece(newPiece);
+		removePiece(newPiece);
 		gameIsOver = true;
 		winner = newPiece->getOwner().getOpposite().toString() + " Wins!";
 	}
@@ -246,6 +248,7 @@ void Board::unmakeMove(Move& move) {
 
 	if (move.get_captured_piece() != nullptr) {
 		move.getNewLocation()->setPiece(move.get_captured_piece());
+		move.get_captured_piece()->setPosition(move.getNewLocation());
 		this->getPieceList(move.getSide().getOpposite()).push_back(move.get_captured_piece());
 	}
 
@@ -263,16 +266,15 @@ void Board::unmakeMove(Move& move) {
 	}
 }
 
-sqr_vec Board::getAllLegalMovesForPlayer(PlayerSide side) {
-	//piece_vec myPieces = this->getPieceList(side);
-	//sqr_vec all_legal_moves;
-	//for (auto& i : myPieces) {
-	//	sqr_vec current_legal_moves = i->getLegalMoves(this, side);
-	//	for (auto& j : current_legal_moves)
-	//		all_legal_moves.push_back(j);
-	//}
-	//
-	return sqr_vec();
+move_vec Board::getAllLegalMovesForPlayer(PlayerSide side) {
+	piece_vec myPieces = this->getPieceList(side);
+	move_vec all_legal_moves;
+	for (auto& i : myPieces) {
+		move_vec current_legal_moves = i->getLegalMoves(*this, side);
+		for (auto& j : current_legal_moves)
+			all_legal_moves.push_back(j);
+	}
+	return all_legal_moves;
 }
 
 

@@ -6,7 +6,7 @@ King::King(shr_sqr position, PlayerSide playerSide) {
 	this->owner = playerSide;
 }
 
-sqr_vec King::getLegalMoves(Board& board, PlayerSide pColor) {
+move_vec King::getLegalMoves(Board& board, PlayerSide pColor) {
 	sqr_vec legalMoves;
 
 	// Add the move on right,left,up and down positions
@@ -24,7 +24,7 @@ sqr_vec King::getLegalMoves(Board& board, PlayerSide pColor) {
 	// CastleUp
 	addCastleUpIfPossible(legalMoves, board);
 
-	return legalMoves;
+	return makeMovesOutOfEndPosition(legalMoves);
 }
 
 void King::addCastleUpIfPossible(sqr_vec& legalMoves, Board& board) {
