@@ -5,6 +5,6 @@ class HumanPlayer : public Player
 
 public:
 	HumanPlayer(PlayerSide color);
-	Move* getMove(Board *board);
+	Move getMove(Board& board);
 };
 

@@ -6,7 +6,7 @@
 class ChessPiece;
 typedef std::shared_ptr<ChessPiece> shr_piece;
 
-class Square{
+class Square {
 private:
 	shr_piece chessPiece = nullptr;
 	int x;

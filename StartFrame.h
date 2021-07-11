@@ -22,9 +22,9 @@ public:
 
     std::vector<std::vector<wxBitmapButton*>> chessBoard;
     int isHumanPlayer = 1;
-    Board* board;
-    Player* player1;
-    Player* player2;
+    Board board;
+    Player* player1 = nullptr;
+    Player* player2 = nullptr;
     wxGridSizer* grid;
 
 

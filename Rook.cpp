@@ -6,8 +6,8 @@ Rook::Rook(shr_sqr position, PlayerSide playerSide){
 	this->owner = playerSide;
 }
 
-sqr_vec* Rook::getLegalMoves(Board* board, PlayerSide pColor){
-	sqr_vec* legalMoves = new sqr_vec();
+sqr_vec Rook::getLegalMoves(Board& board, PlayerSide pColor){
+	sqr_vec legalMoves;
 
 	addHorizontal(legalMoves, board, pColor);
 	addVertical(legalMoves, board, pColor);

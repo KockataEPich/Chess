@@ -12,5 +12,5 @@ private:
 
 	float enemyOffSet = 0.4;
 public:
-	int evaluateBoard(Board* board, PlayerSide pColor);
+	int evaluateBoard(Board& board, PlayerSide pColor);
 };

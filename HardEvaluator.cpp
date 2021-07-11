@@ -1,15 +1,15 @@
 #include "HardEvaluator.h"
 
-int HardEvaluator::evaluateBoard(Board* board, PlayerSide pColor) {
+int HardEvaluator::evaluateBoard(Board& board, PlayerSide pColor) {
 	int ourPiecesSum = 0;
 	int enemyPiecesSum = 0;
 
 
 
-	piece_vec* pieces = board->getPieceList(pColor);
+	piece_vec pieces = board.getPieceList(pColor);
 
-	for (int i = 0; i < pieces->size(); i++) {
-		std::string name = pieces->at(i)->getName();
+	for (int i = 0; i < pieces.size(); i++) {
+		std::string name = pieces.at(i)->getName();
 		if (name == "Pawn") {
 			ourPiecesSum += pawnPieceValue;
 			continue;
@@ -35,10 +35,10 @@ int HardEvaluator::evaluateBoard(Board* board, PlayerSide pColor) {
 			ourPiecesSum += kingPieceValue;
 	}
 
-	pieces = board->getPieceList(pColor.getOpposite());
+	pieces = board.getPieceList(pColor.getOpposite());
 
-	for (int i = 0; i < pieces->size(); i++) {
-		std::string name = pieces->at(i)->getName();
+	for (int i = 0; i < pieces.size(); i++) {
+		std::string name = pieces.at(i)->getName();
 		if (name == "Pawn") {
 			enemyPiecesSum += (int)(pawnPieceValue * enemyOffSet);
 			continue;

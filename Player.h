@@ -23,11 +23,10 @@ public:
 	void clearPoints();
 
 	shr_sqr getFirstClicked();
-	void setFirstClicked(shr_sqr square);
+	void setFirstClicked(shr_sqr  square);
 	shr_sqr getSecondClickedSquare();
-	void setSecondClickedSquare(shr_sqr sqaure);
-	
+	void setSecondClickedSquare(shr_sqr  sqaure);
 
-	virtual Move* getMove(Board* board) = 0;
+	virtual Move getMove(Board& board) = 0;
 	virtual ~Player() {};
 };

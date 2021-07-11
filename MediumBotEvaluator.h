@@ -10,6 +10,6 @@ private:
 	int queenPieceValue = 400;
 	int kingPieceValue = 10000;
 public:
-	int evaluateBoard(Board* board, PlayerSide pColor);
+	int evaluateBoard(Board& board, PlayerSide pColor);
 };
 

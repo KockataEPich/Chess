@@ -1,27 +1,28 @@
 #include "HardBot.h"
 #include "HardEvaluator.h"
 
-HardBot::HardBot(PlayerSide color, int depth, Evaluator* evaluator) { 
+HardBot::HardBot(PlayerSide color, int depth, Evaluator* evaluator, Board& board) {
 	this->color = color; 
 	this->depth = depth;
 	this->evaluator = evaluator;
+	this->board = board;
 }
 
 HardBot::~HardBot() {
 	delete(evaluator);
 }
 
-Move* HardBot::getMove(Board* board) {
-	MinMaxAlphaBeta(board, color, 0, INT_MIN, INT_MAX);
+Move HardBot::getMove(Board& board) {
+	MinMaxAlphaBeta(color, 0, INT_MIN, INT_MAX);
 	return currentBestMove;
 }
 	
-int HardBot::MinMaxAlphaBeta(Board* board, PlayerSide pColor, int currentDepth, int alpha, int beta){
+int HardBot::MinMaxAlphaBeta(PlayerSide pColor, int currentDepth, int alpha, int beta){
 	if (currentDepth == depth)
 		return evaluator->evaluateBoard(board, color);
 
 	//The input would be a on click input
-	piece_vec* myPieces = board->getPieceList(pColor);
+	piece_vec myPieces = board.getPieceList(pColor);
 	int bestBoardValue;
 	
 	if(pColor == color)
@@ -32,36 +33,35 @@ int HardBot::MinMaxAlphaBeta(Board* board, PlayerSide pColor, int currentDepth, 
 	shr_sqr bestInitMove = nullptr;
 	shr_sqr bestSecondMove = nullptr;
 
-	for (int i = 0; i < myPieces->size(); i++){
-		sqr_vec* legalMoves = myPieces->at(i)->getLegalMoves(board, pColor);
-		for (int j = 0; j < legalMoves->size(); j++) {
-			Board* newBoard = new Board(board->getBoard());
+	for (int i = 0; i < myPieces.size(); i++){
+		sqr_vec legalMoves = myPieces[i]->getLegalMoves(board, pColor);
+		for (int j = 0; j < legalMoves.size(); j++) {
+			
+			shr_sqr start_sqr = myPieces[i]->getPosition();
+			shr_sqr end_sqr = legalMoves.at(j);
 
-			shr_sqr start_sqr = myPieces->at(i)->getPosition();
-			shr_sqr end_sqr = legalMoves->at(j);
+			Move move(
+				board(start_sqr->getX(), start_sqr->getY()),
+				board(end_sqr->getX(), end_sqr->getY()), pColor);
 
-			Move* move = new Move(
-				(*newBoard)(start_sqr->getX(), start_sqr->getY()),
-				(*newBoard)(end_sqr->getX(), end_sqr->getY()), pColor);
-
-			newBoard->makeMove(move);
+			board.makeMove(move);
 
 			int currentBoardValue;
 
-			if (newBoard->isOver())
+			if (board.isOver())
 				if (pColor == color)
 					currentBoardValue = INT_MAX;
 				else
 					currentBoardValue = INT_MIN;
 			else 
-				currentBoardValue = MinMaxAlphaBeta(newBoard, pColor.getOpposite(),
+				currentBoardValue = MinMaxAlphaBeta(pColor.getOpposite(),
 					currentDepth + 1, alpha, beta);
 
 			if (pColor == color && currentBoardValue > bestBoardValue ||
 				pColor != color && currentBoardValue < bestBoardValue) {
 				bestBoardValue = currentBoardValue;
-				bestInitMove = myPieces->at(i)->getPosition();
-				bestSecondMove = legalMoves->at(j);
+				bestInitMove = start_sqr;
+				bestSecondMove = end_sqr;
 			}
 
 			if (pColor == color && bestBoardValue > alpha)
@@ -70,22 +70,17 @@ int HardBot::MinMaxAlphaBeta(Board* board, PlayerSide pColor, int currentDepth, 
 			if (pColor != color && bestBoardValue < beta)
 				beta = bestBoardValue;
 
-			
-			delete(newBoard);
-			delete(move);
-
+			board.unmakeMove(move);
 			// Stop the search if it is pointless
 			if (alpha > beta) 
 				break;
 		}
-
-		delete(legalMoves);
 		if (alpha > beta)
 			break;
 	}
 	
 	if (currentDepth == 0)
-		currentBestMove = new Move(bestInitMove, bestSecondMove, pColor);
+		currentBestMove = Move(bestInitMove, bestSecondMove, pColor);
 
 	return bestBoardValue;
 }

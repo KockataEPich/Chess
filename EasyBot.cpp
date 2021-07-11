@@ -8,23 +8,21 @@ EasyBot::EasyBot(PlayerSide color)
 	this->color = color;
 }
 
-Move* EasyBot::getMove(Board* board){		
+Move EasyBot::getMove(Board& board){		
 	//The input would be a on click input
-	piece_vec* myPieces = board->getPieceList(color);
+	piece_vec myPieces = board.getPieceList(color);
 	
-	for (int i = 0; i < myPieces->size(); i++)
+	for (int i = 0; i < myPieces.size(); i++)
 	{
-		sqr_vec* legalMoves = myPieces->at(i)->getLegalMoves(board, color);
+		sqr_vec legalMoves = myPieces[i]->getLegalMoves(board, color);
 
-		if (legalMoves->size() > 0) {
-			Move* randomMove = new Move(myPieces->at(i)->getPosition(), legalMoves->at(rand() % legalMoves->size()), color);
-			delete(legalMoves);
+		if (legalMoves.size() > 0) {
+			Move randomMove(myPieces[i]->getPosition(), legalMoves[rand() % legalMoves.size()], color);
 			return randomMove;
 		}
-		delete(legalMoves);
 	}
 
-	return new Move((*board)(1, 0), (*board)(2, 0), color);
+	return Move(board(1, 0), board(2, 0), color);
 }
 
 
