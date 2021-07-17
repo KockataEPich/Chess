@@ -160,6 +160,11 @@ void Board::makeMove(Move& move){
 
 	newSquare(move, this)->setPiece(move.getOldLocation()->getPiece());
 	newSquare(move, this)->getPiece()->setPosition(newSquare(move, this));
+
+	if (!newSquare(move, this)->getPiece()->hasMoved()) {
+		newSquare(move, this)->getPiece()->setFirstMove(false);
+		move.changeFirstMoveOfPiece();
+	}
 	move.getOldLocation()->removePiece();
 
 	handlePiecePromotion(board[move.getNewLocation()->getX()][move.getNewLocation()->getY()], move);
@@ -206,13 +211,14 @@ void Board::checkForCastleUp(Move& move, shr_sqr& newSquare) {
 	};
 
 	if (piece->hasMoved() == false && piece->getName() == "King"){
-		move.setCastleUpTrue();
 		if (move.getOldLocation()->getY() - newSquare->getY() == -2) {
+			move.setCastleUpTrue();
 			Move rookMove(sqrYOff(7, move, board),
 				sqrYOff(5, move, board), move.getSide());
 			this->makeMove(rookMove);
 		}
 		else if (move.getOldLocation()->getY() - newSquare->getY() == 3) {
+			move.setCastleUpTrue();
 			Move rookMove(sqrYOff(0, move, board),
 				sqrYOff(2, move, board), move.getSide());
 			this->makeMove(rookMove);
@@ -226,8 +232,11 @@ void Board::handlePiecePromotion(shr_sqr& newSquare, Move& move) {
 	auto movedPiece = newSquare->getPiece();
 	int x = movedPiece->getPosition()->getX();
 	if (movedPiece->getName() == "Pawn" && (x == 7 || x == 0)) {
+		move.isPromoting();
 		shr_piece promotedPiece = std::make_shared<Queen>(newSquare, move.getSide());
 		newSquare->setPiece(promotedPiece);
+
+		move.setPromotedPiece(promotedPiece);
 
 		if (move.getSide() == PlayerSide::WHITE)
 			whitePieces.push_back(promotedPiece);
@@ -246,6 +255,24 @@ void Board::unmakeMove(Move& move) {
 	Move backwards_move(move.getNewLocation(), move.getOldLocation(), move.getSide());
 	this->makeMove(backwards_move);
 
+	if (move.hasPromoted()) {
+		shr_piece promoted_piece = move.getPromotedPiece();
+		removePiece(promoted_piece);
+
+
+		shr_piece pawnPiece = std::make_shared<Pawn>(move.getOldLocation(), move.getSide());
+		if (move.getSide() == PlayerSide::WHITE)
+			whitePieces.push_back(pawnPiece);
+		else
+			blackPieces.push_back(pawnPiece);
+
+		pawnPiece->setFirstMove(false);
+		move.getOldLocation()->setPiece(pawnPiece);
+	}
+
+	if (move.hasChangedFirstMoveOfPiece())
+		move.getOldLocation()->getPiece()->setFirstMove(true);
+
 	if (move.get_captured_piece() != nullptr) {
 		move.getNewLocation()->setPiece(move.get_captured_piece());
 		move.get_captured_piece()->setPosition(move.getNewLocation());
@@ -257,11 +284,13 @@ void Board::unmakeMove(Move& move) {
 			Move rookMove(sqrYOff(5, move, board),
 				sqrYOff(7, move, board), move.getSide());
 			this->makeMove(rookMove);
+			sqrYOff(7, move, board)->getPiece()->setFirstMove(true);
 		}
 		else if (move.getOldLocation()->getY() - move.getNewLocation()->getY() == 3) {
 			Move rookMove(sqrYOff(2, move, board),
 				sqrYOff(0, move, board), move.getSide());
 			this->makeMove(rookMove);
+			sqrYOff(0, move, board)->getPiece()->setFirstMove(true);
 		}
 	}
 }

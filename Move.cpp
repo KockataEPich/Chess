@@ -15,5 +15,11 @@ std::shared_ptr<Square> Move::getNewLocation() { return newLocation.lock(); }
 PlayerSide Move::getSide() { return side; }
 void Move::set_captured_piece(std::shared_ptr<ChessPiece> piece) { captured_piece = piece; }
 std::shared_ptr<ChessPiece> Move::get_captured_piece() { return captured_piece; }
-void Move::setCastleUpTrue() {}
+void Move::setCastleUpTrue() { castle_up = true; }
 bool Move::isCastleUp() { return castle_up; }
+void Move::changeFirstMoveOfPiece() { changed_first_move = true; }
+bool Move::hasChangedFirstMoveOfPiece() { return changed_first_move; }
+void Move::isPromoting() { promoted_pawn = true; }
+bool Move::hasPromoted() { return promoted_pawn; }
+void Move::setPromotedPiece(std::shared_ptr<ChessPiece> promotedPiece) { this->promoted_piece = promotedPiece; }
+std::shared_ptr<ChessPiece> Move::getPromotedPiece() { return promoted_piece; }

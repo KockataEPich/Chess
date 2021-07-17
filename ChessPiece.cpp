@@ -11,11 +11,10 @@ shr_sqr ChessPiece::getPosition() { return position.lock(); }
 PlayerSide ChessPiece::getOwner() { return owner; }
 bool ChessPiece::hasMoved() { return !firstMove; }
 bool ChessPiece::inRange(int x) { return x < 8 && x >= 0; }
-void ChessPiece::setFirstMove(bool hasMoved) { this->firstMove = !hasMoved; }
+void ChessPiece::setFirstMove(bool hasMoved) { this->firstMove = hasMoved; }
 
 void ChessPiece::setPosition(shr_sqr newPosition) {
 	position = newPosition;
-	firstMove = false;
 }
 
 void ChessPiece::addVertical(sqr_vec& legalMoves, Board& board, PlayerSide pColor) {

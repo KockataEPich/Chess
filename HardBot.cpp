@@ -20,7 +20,7 @@ Move HardBot::getMove(Board& board) {
 	
 int HardBot::MinMaxAlphaBeta(PlayerSide pColor, int currentDepth, int alpha, int beta){
 	if (currentDepth == depth)
-		return evaluator->evaluateBoard(board, color);
+		return evaluator->evaluateBoard(board, pColor);
 
 	move_vec all_legal_moves = board.getAllLegalMovesForPlayer(pColor);
 	Move bestMoveSoFar;

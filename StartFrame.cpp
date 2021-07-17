@@ -52,7 +52,7 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 
 	//player1 = new EasyBot(PlayerSide::WHITE);
 	player1 = new HumanPlayer(PlayerSide::WHITE);
-	player2 = new HardBot(PlayerSide::BLACK, 2, evaluator1, board);
+	player2 = new HardBot(PlayerSide::BLACK, 5, evaluator1, board);
 	isHumanPlayer = 1;
 	updateGameGUI();
 };

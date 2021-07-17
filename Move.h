@@ -11,20 +11,37 @@ class Move
 {
 private:
 	bool castle_up = false;
+	bool changed_first_move = false;
+	bool promoted_pawn = false;
+
 	std::weak_ptr<Square> oldLocation;
 	std::weak_ptr<Square> newLocation;
-	std::shared_ptr<ChessPiece> captured_piece;
+	std::shared_ptr<ChessPiece> captured_piece; 
+	std::shared_ptr<ChessPiece> promoted_piece;
+
 	PlayerSide side;
 public:
 	Move() {};
 	Move(std::shared_ptr<Square> oldLocation, std::shared_ptr<Square> newLocation, PlayerSide side);
 	~Move();
+	PlayerSide getSide();
+
 	std::shared_ptr<Square> getOldLocation();
 	std::shared_ptr<Square> getNewLocation();
-	PlayerSide getSide();
+
 	void set_captured_piece(std::shared_ptr<ChessPiece> piece);
 	std::shared_ptr<ChessPiece> get_captured_piece();
+
 	void setCastleUpTrue();
 	bool isCastleUp();
+
+	void changeFirstMoveOfPiece();
+	bool hasChangedFirstMoveOfPiece();
+
+	void isPromoting();
+	bool hasPromoted();
+
+	void setPromotedPiece(std::shared_ptr<ChessPiece> promotedPiece);
+	std::shared_ptr<ChessPiece> getPromotedPiece();
 };
 
