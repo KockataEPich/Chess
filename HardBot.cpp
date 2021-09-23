@@ -1,15 +1,9 @@
 #include "HardBot.h"
 #include "HardEvaluator.h"
 
-HardBot::HardBot(PlayerSide color, int depth, Evaluator* evaluator, Board& board) {
+HardBot::HardBot(PlayerSide color, int depth, Evaluator& evaluator) : evaluator(evaluator){
 	this->color = color; 
 	this->depth = depth;
-	this->evaluator = evaluator;
-	this->board = board;
-}
-
-HardBot::~HardBot() {
-	delete(evaluator);
 }
 
 Move HardBot::getMove(Board& board) {
@@ -20,7 +14,7 @@ Move HardBot::getMove(Board& board) {
 	
 int HardBot::MinMaxAlphaBeta(PlayerSide pColor, int currentDepth, int alpha, int beta){
 	if (currentDepth == depth)
-		return evaluator->evaluateBoard(board, pColor);
+		return evaluator.evaluateBoard(board, pColor);
 
 	move_vec all_legal_moves = board.getAllLegalMovesForPlayer(pColor);
 	Move bestMoveSoFar;

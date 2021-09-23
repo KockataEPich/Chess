@@ -6,14 +6,13 @@
 
 class HardBot : public Player{
 private:
-	Evaluator* evaluator; 
+	Evaluator& evaluator; 
 	int depth;
 	Move currentBestMove;
 	Board board;
 
 public:
-	HardBot(PlayerSide color, int depth, Evaluator* evaluator, Board& board);
-	~HardBot();
+	HardBot(PlayerSide color, int depth, Evaluator& evaluator);
 	Move getMove(Board& board);
 	int MinMaxAlphaBeta(PlayerSide currentSide, int currentDepth, int alpha, int beta);
 };

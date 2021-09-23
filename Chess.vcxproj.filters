@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Evaluator">
       <UniqueIdentifier>{e970aeb0-ac6e-4937-9df6-7f7629a02d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manager">
+      <UniqueIdentifier>{82a36ac6-dc0f-4941-b486-d51bc47ea15d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Manager">
+      <UniqueIdentifier>{728f4428-e01b-4578-a6a9-917452d5fa2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StartFrame.cpp">
@@ -98,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="VeryHardBot.cpp">
       <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManager.cpp">
+      <Filter>Source Files\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="VeryHardBot.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManager.h">
+      <Filter>Header Files\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

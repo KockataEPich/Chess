@@ -47,12 +47,12 @@ StartFrame::StartFrame() : wxFrame(nullptr, wxID_ANY, "Chess", wxPoint(30, 30), 
 	this->SetSizer(grid);
 	grid->Layout();
 
-	Evaluator* evaluator1 = new MediumBotEvaluator();
+	MediumBotEvaluator evaluator1;
 	//Evaluator* evaluator2 = new HardEvaluator();
 
-	//player1 = new EasyBot(PlayerSide::WHITE);
+	//zplayer1 = new EasyBot(PlayerSide::WHITE);
 	player1 = new HumanPlayer(PlayerSide::WHITE);
-	player2 = new HardBot(PlayerSide::BLACK, 5, evaluator1, board);
+	player2 = new HardBot(PlayerSide::BLACK, 4, evaluator1);
 	isHumanPlayer = 1;
 	updateGameGUI();
 };
